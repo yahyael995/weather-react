@@ -1,0 +1,23 @@
+/* src/App.css (النسخة الكاملة مع دعم الوضع الليلي) */
+
+:root {
+  --bg-color: #f0f2f5;
+  --text-color: #222;
+  --container-bg: #ffffff;
+  /* ... باقي المتغيرات ... */
+}
+
+html.dark {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --container-bg: #1e1e1e;
+  /* ... باقي المتغيرات ... */
+}
+
+body {
+  /* ... */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* ... (انسخ كل الكود من الخطوة 15 هنا) ... */
