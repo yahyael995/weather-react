@@ -1,16 +1,38 @@
-# React + Vite
+# Weather React App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A complete, full-stack weather application built with React for the frontend and Node.js/Express for the backend. This project fetches real-time weather data from the Open-Meteo API and presents it in a clean, responsive, and user-friendly interface.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### **Live Demo**
 
-## React Compiler
+**[Click here to view the live application!](https://nimble-tapioca-ac12aa.netlify.app )**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+### **Features**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+*   **Dynamic Background:** The background image changes based on the current weather conditions.
+*   **City Search:** Search for any city worldwide to get its weather forecast.
+*   **Current Weather:** Displays temperature, feels like, wind speed, humidity, and a weather description.
+*   **Hourly & Daily Forecasts:** Clean, scrollable sections for hourly and 7-day forecasts.
+*   **Interactive Charts:**
+    *   24-hour temperature trend chart with custom weather icons.
+    *   24-hour precipitation probability chart.
+*   **Unit Toggling:** Switch between Celsius and Fahrenheit.
+*   **Dark/Light Mode:** A theme toggle for user comfort.
+*   **Responsive Design:** Looks great on both desktop and mobile devices.
+*   **Custom Favicon:** A unique browser tab icon for brand identity.
+*   **User-Friendly Error Handling:** Displays clear messages for invalid city names or network issues.
+
+---
+
+### **Tech Stack**
+
+*   **Frontend:** React, Vite, CSS
+*   **Backend:** Node.js, Express
+*   **APIs:** Open-Meteo (Geocoding & Weather Forecast)
+*   **Deployment:**
+    *   Frontend deployed on **Netlify**.
+    *   Backend deployed on **Render**.
+
