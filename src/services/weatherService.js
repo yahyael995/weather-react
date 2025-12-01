@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // 1. تعريف عنوان الـ API الجديد الخاص بنا
-const BACKEND_API_URL = 'https://weather-backend-ogz2.onrender.com'; // <-- الرابط الجديد
+const API_BASE_URL = 'http://localhost:3001/weather';
 // 2. تعديل دالة getCoordinates (لا تزال تتحدث مع Open-Meteo مباشرة )
 // (لا تغيير هنا، يمكننا نقلها إلى الـ Backend لاحقًا ولكن لنبقها بسيطة الآن)
 export const getCoordinates = async (cityName) => {

@@ -1,16 +1,17 @@
-// src/components/SearchBar.jsx (مع البحث التلقائي)
+// src/components/SearchBar.jsx
+import React from 'react';
 
-function SearchBar({ value, onChange }) {
+const SearchBar = ({ city, onCityChange }) => {
   return (
     <div className="search-bar">
       <input
         type="text"
-        placeholder="Enter city to search automatically..."
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={city}
+        onChange={(e) => onCityChange(e.target.value)}
+        placeholder="Search for a city..."
       />
     </div>
   );
-}
+};
 
 export default SearchBar;

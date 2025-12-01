@@ -21,3 +21,265 @@ body {
 }
 
 /* ... (انسخ كل الكود من الخطوة 15 هنا) ... */
+/* Add this to App.css */
+.charts-container {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+/* D:/weather-react/src/App.css */
+
+.App {
+  min-height: 100vh; /* Make sure the app container takes at least the full screen height */
+  transition: background-image 0.5s ease-in-out;
+  
+  /* These 4 lines fix the background repetition issue */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+/* D:/weather-react/src/App.css (Add these new styles at the end) */
+
+/* Professional Top Bar Styles */
+.top-bar {
+  display: flex;
+  justify-content: space-between; /* Puts search on the left, buttons on the right */
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Allows items to wrap on small screens */
+}
+
+/* --- Search Bar Styles --- */
+.search-bar {
+  flex-grow: 1; /* Allows the search bar to take up available space */
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1em;
+  border-radius: 25px; /* Fully rounded ends */
+  border: 1px solid var(--border-color);
+  background-color: var(--item-bg);
+  color: var(--text-color);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+  border-color: #8884d8; /* Highlight color on focus */
+  box-shadow: 0 0 5px rgba(136, 132, 216, 0.5);
+}
+
+/* --- Button Group Styles --- */
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.button-group button {
+  background-color: var(--item-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 50%; /* Makes the buttons circular */
+  width: 45px;
+  height: 45px;
+  font-size: 1.5em; /* Makes the icons inside bigger */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.button-group button:hover {
+  background-color: #8884d8;
+  color: white;
+  border-color: #8884d8;
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+/* D:/weather-react/src/App.css (Add these new styles at the end) */
+
+/* Professional Top Bar Styles */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* --- Search Bar Styles --- */
+.search-bar {
+  flex-grow: 1;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1em;
+  border-radius: 25px;
+  border: 1px solid #ccc; /* Using a solid color */
+  background-color: white; /* Using explicit white color */
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+  border-color: #8884d8;
+  box-shadow: 0 0 5px rgba(136, 132, 216, 0.5);
+}
+
+/* --- Button Group Styles --- */
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.button-group button {
+  background-color: white; /* Using explicit white color */
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.button-group button:hover {
+  background-color: #8884d8;
+  color: white;
+  border-color: #8884d8;
+  transform: translateY(-2px);
+}
+/* D:/weather-react/src/App.css (Add this new style at the end) */
+
+/* This is the main container that holds all the white boxes */
+.main-container {
+  width: 100%;
+  max-width: 800px; /* Sets a maximum width for the content */
+  padding: 20px;
+  
+  /* These 3 lines will center all the content */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This is the magic line that centers all children */
+}
+/* D:\weather-react\src\App.css */
+
+/* --- Add these new styles at the end of the file --- */
+
+.content-area {
+  width: 100%;
+}
+
+/* Loading Spinner Styles */
+.loading-spinner {
+  margin: 50px auto;
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode spinner */
+body.dark .loading-spinner {
+  border: 5px solid rgba(0, 0, 0, 0.3);
+  border-top-color: #ccc;
+}
+
+/* Error Box Styles */
+.error-box {
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  border-left: 5px solid #e74c3c; /* Red accent */
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.error-icon {
+  font-size: 2em;
+}
+
+.error-box p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Welcome Message Styles */
+.welcome-message {
+  background-color: var(--container-bg);
+  border: 1px solid var(--border-color);
+  padding: 40px 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.welcome-message h2 {
+  margin-top: 0;
+}
+/* D:\weather-react\src\App.css */
+
+/* --- Add these new styles at the end of the file --- */
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds space between all items in the top bar */
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.search-bar {
+  flex-grow: 1; /* Allows the search bar to take up available space */
+}
+
+.geo-button {
+  background: var(--container-bg);
+  border: 1px solid var(--border-color);
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2em;
+  line-height: 1; /* Helps with vertical alignment */
+  transition: background-color 0.2s;
+}
+
+.geo-button:hover {
+  background-color: var(--hover-bg);
+}

@@ -1,26 +1,29 @@
-// src/hooks/useDebounce.js
+// src/hooks/useDebounce.js (The correct and complete version)
 
 import { useState, useEffect } from 'react';
 
-// هذا الخطاف يأخذ قيمة (مثل نص البحث) ومدة تأخير
-function useDebounce(value, delay) {
-  // حالة لتخزين القيمة "المؤجلة"
+export function useDebounce(value, delay) {
+  // State and setters for debounced value
   const [debouncedValue, setDebouncedValue] = useState(value);
 
-  useEffect(() => {
-    // إعداد مؤقت (timer) سيقوم بتحديث القيمة بعد انتهاء مدة التأخير
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+  useEffect(
+    () => {
+      // Set debouncedValue to value (the latest value) after the specified delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
 
-    // دالة التنظيف: هذه الدالة يتم استدعاؤها في كل مرة تتغير فيها "value"
-    // وظيفتها هي إلغاء المؤقت القديم قبل إعداد مؤقت جديد
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]); // إعادة تشغيل التأثير فقط إذا تغيرت القيمة أو مدة التأخير
+      // Return a cleanup function that will be called every time useEffect is re-called.
+      // useEffect will only be re-called if value or delay changes.
+      // This is how we prevent debouncedValue from changing if value is changed ...
+      // .. within the delay period. Timeout gets cleared and restarted.
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    // Only re-call effect if value or delay changes
+    [value, delay]
+  );
 
   return debouncedValue;
 }
-
-export default useDebounce;
