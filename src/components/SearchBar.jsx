@@ -1,17 +1,28 @@
-// src/components/SearchBar.jsx
-import React from 'react';
+// D:\weather-react\src\components\SearchBar.jsx
 
-const SearchBar = ({ city, onCityChange }) => {
+import React, { useState } from 'react';
+
+function SearchBar({ onSearch }) {
+  const [city, setCity] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (city.trim()) {
+      onSearch(city.trim());
+    }
+  };
+
   return (
-    <div className="search-bar">
+    <form onSubmit={handleSearch} className="search-bar">
       <input
         type="text"
         value={city}
-        onChange={(e) => onCityChange(e.target.value)}
+        onChange={(e) => setCity(e.target.value)}
         placeholder="Search for a city..."
       />
-    </div>
+      <button type="submit">Search</button>
+    </form>
   );
-};
+}
 
 export default SearchBar;
