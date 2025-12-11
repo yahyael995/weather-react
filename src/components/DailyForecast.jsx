@@ -1,13 +1,13 @@
-// src/components/DailyForecast.jsx (النسخة النهائية مع فحص الأمان)
+// src/components/DailyForecast.jsx (النسخة النهائية مع إعادة فحص الأمان)
 
 import React from 'react';
 import { getWeatherIcon } from '../utils/icons';
 
 const DailyForecast = ({ data, unit }) => {
-  // --- هذا هو فحص الأمان الذي يحل المشكلة ---
+  // --- هذا هو فحص الأمان الذي تمت إعادته ---
   // إذا لم تكن البيانات أو الوقت موجودًا، لا تعرض أي شيء
   if (!data || !data.time) {
-    return null; // أو يمكنك عرض رسالة "جاري التحميل..."
+    return null;
   }
 
   const tempUnitLabel = unit === 'celsius' ? '°C' : '°F';
@@ -17,7 +17,8 @@ const DailyForecast = ({ data, unit }) => {
       <h3>7-Day Forecast</h3>
       {data.time.map((time, index) => {
         const day = new Date(time).toLocaleDateString('en-US', { weekday: 'short' });
-        const iconCode = data.weather_code[index];
+        // --- هذا هو الإصلاح الثاني: نستخدم weathercode بدون شرطة سفلية ---
+        const iconCode = data.weathercode[index];
         const maxTemp = Math.round(data.temperature_2m_max[index]);
         const minTemp = Math.round(data.temperature_2m_min[index]);
 
