@@ -1,4 +1,4 @@
-// src/utils/icons.js (النسخة النهائية مع كل الأوصاف)
+// src/utils/icons.js (النسخة النهائية مع توحيد الخريطتين)
 
 import clearDay from '../assets/icons/clear-day.svg';
 import clearNight from '../assets/icons/clear-night.svg';
@@ -10,23 +10,24 @@ import rain from '../assets/icons/rain.svg';
 import snow from '../assets/icons/snow.svg';
 import thunderstorm from '../assets/icons/thunderstorm.svg';
 
+// --- هذا هو الجزء الذي تم تحديثه بالكامل ---
 const iconMap = {
   0: clearDay,
   1: partlyCloudyDay,
   2: cloudy,
   3: cloudy,
   45: fog,
-  48: fog, // Changed from 46 to 48 for rime fog
+  48: fog,
   51: rain,
   53: rain,
   55: rain,
-  56: rain, // Freezing Drizzle
-  57: rain, // Freezing Drizzle
+  56: rain,
+  57: rain,
   61: rain,
   63: rain,
   65: rain,
-  66: rain, // Freezing Rain
-  67: rain, // Freezing Rain
+  66: rain,
+  67: rain,
   71: snow,
   73: snow,
   75: snow,
@@ -34,14 +35,13 @@ const iconMap = {
   80: rain,
   81: rain,
   82: rain,
-  85: snow, // Snow showers
-  86: snow, // Snow showers
+  85: snow,
+  86: snow,
   95: thunderstorm,
   96: thunderstorm,
   99: thunderstorm,
 };
 
-// --- هذا هو الجزء الذي تم تحديثه بالكامل ---
 const descriptionMap = {
     0: 'Clear Sky',
     1: 'Mainly Clear',
