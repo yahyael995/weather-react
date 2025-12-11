@@ -1,4 +1,5 @@
-// src/App.jsx (النسخة النهائية مع الإصلاح)
+// src/App.jsx (النسخة النهائية مع إصلاح الخلفية)
+
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -34,7 +35,7 @@ function App() {
     let finalUrl;
     let currentQuery;
 
-    if (params.city ) {
+    if (params.city) {
       currentQuery = { type: 'city', value: params.city };
       queryParams.append('city', params.city);
       finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
@@ -103,7 +104,7 @@ function App() {
     setIsDarkMode(prevMode => !prevMode);
   };
 
-  // --- هذا هو الإصلاح ---
+  // --- هذا هو السطر الذي تم إصلاحه ---
   const backgroundStyle = weatherData
     ? { backgroundImage: `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})` }
     : {};
