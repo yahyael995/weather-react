@@ -1,4 +1,4 @@
-// src/utils/icons.js (النسخة النهائية مع إضافة الدالة المفقودة)
+// src/utils/icons.js (النسخة النهائية مع كل الأوصاف)
 
 import clearDay from '../assets/icons/clear-day.svg';
 import clearNight from '../assets/icons/clear-night.svg';
@@ -11,55 +11,72 @@ import snow from '../assets/icons/snow.svg';
 import thunderstorm from '../assets/icons/thunderstorm.svg';
 
 const iconMap = {
-  0: clearDay, // Clear sky
-  1: partlyCloudyDay, // Mainly clear
-  2: cloudy, // Partly cloudy
-  3: cloudy, // Overcast
-  45: fog, // Fog
-  46: fog, // Depositing rime fog
-  51: rain, // Drizzle: Light
-  53: rain, // Drizzle: Moderate
-  55: rain, // Drizzle: Dense intensity
-  61: rain, // Rain: Slight
-  63: rain, // Rain: Moderate
-  65: rain, // Rain: Heavy intensity
-  80: rain, // Rain showers: Slight
-  81: rain, // Rain showers: Moderate
-  82: rain, // Rain showers: Violent
-  95: thunderstorm, // Thunderstorm: Slight or moderate
-  // Add night icons if you have them and logic to switch
+  0: clearDay,
+  1: partlyCloudyDay,
+  2: cloudy,
+  3: cloudy,
+  45: fog,
+  48: fog, // Changed from 46 to 48 for rime fog
+  51: rain,
+  53: rain,
+  55: rain,
+  56: rain, // Freezing Drizzle
+  57: rain, // Freezing Drizzle
+  61: rain,
+  63: rain,
+  65: rain,
+  66: rain, // Freezing Rain
+  67: rain, // Freezing Rain
+  71: snow,
+  73: snow,
+  75: snow,
+  77: snow,
+  80: rain,
+  81: rain,
+  82: rain,
+  85: snow, // Snow showers
+  86: snow, // Snow showers
+  95: thunderstorm,
+  96: thunderstorm,
+  99: thunderstorm,
 };
 
+// --- هذا هو الجزء الذي تم تحديثه بالكامل ---
 const descriptionMap = {
     0: 'Clear Sky',
     1: 'Mainly Clear',
     2: 'Partly Cloudy',
     3: 'Overcast',
     45: 'Fog',
-    46: 'Rime Fog',
+    48: 'Rime Fog',
     51: 'Light Drizzle',
     53: 'Drizzle',
     55: 'Dense Drizzle',
+    56: 'Light Freezing Drizzle',
+    57: 'Dense Freezing Drizzle',
     61: 'Slight Rain',
     63: 'Rain',
     65: 'Heavy Rain',
-    71: 'Slight Snow',
-    73: 'Snow',
-    75: 'Heavy Snow',
+    66: 'Light Freezing Rain',
+    67: 'Heavy Freezing Rain',
+    71: 'Slight Snowfall',
+    73: 'Snowfall',
+    75: 'Heavy Snowfall',
     77: 'Snow Grains',
-    80: 'Slight Showers',
+    80: 'Slight Rain Showers',
     81: 'Rain Showers',
-    82: 'Violent Showers',
+    82: 'Violent Rain Showers',
+    85: 'Slight Snow Showers',
+    86: 'Heavy Snow Showers',
     95: 'Thunderstorm',
     96: 'Thunderstorm with Hail',
     99: 'Thunderstorm with Hail',
 };
 
 export function getWeatherIcon(code) {
-  return iconMap[code] || cloudy; // Return a default icon if code not found
+  return iconMap[code] || cloudy;
 }
 
-// --- هذه هي الدالة التي كانت مفقودة ---
 export function getWeatherDescription(code) {
-    return descriptionMap[code] || 'Unknown'; // Return a default description
+    return descriptionMap[code] || 'Unknown';
 }
