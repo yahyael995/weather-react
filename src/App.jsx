@@ -1,4 +1,4 @@
-// src/App.jsx (النسخة النهائية مع إصلاح الخلفية)
+// src/App.jsx (النسخة النهائية مع الخلفية الافتراضية)
 
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
@@ -10,6 +10,8 @@ import WeatherChart from './components/WeatherChart';
 import PrecipitationChart from './components/PrecipitationChart';
 import { getBackgroundImage } from './utils/backgrounds';
 import { getRandomCity } from './utils/randomCities';
+// --- هذا هو السطر الجديد ---
+import defaultBackground from './assets/backgrounds/default.jpg';
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
@@ -104,10 +106,12 @@ function App() {
     setIsDarkMode(prevMode => !prevMode);
   };
 
-  // --- هذا هو السطر الذي تم إصلاحه ---
-  const backgroundStyle = weatherData
-    ? { backgroundImage: `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})` }
-    : {};
+  // --- هذا هو الجزء الذي تم إصلاحه ---
+  const backgroundStyle = {
+    backgroundImage: weatherData
+      ? `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})`
+      : `url(${defaultBackground})`
+  };
 
   return (
     <div className="App" style={backgroundStyle}>
