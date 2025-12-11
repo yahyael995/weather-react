@@ -12,7 +12,7 @@ export default defineConfig({
     proxy: {
       // Proxy requests from /api to the backend server
       '/api': {
-        target: 'https://localhost:3001',
+        target: 'https://weather-backend-ogz2.onrender.com',
         changeOrigin: true,
         secure: false, // IMPORTANT: This allows connecting to a backend with a self-signed certificate
         rewrite: (path ) => path.replace(/^\/api/, ''), // Remove /api from the request path

@@ -1,33 +1,27 @@
-// ===================================================================
-// ===         WEATHER REACT - FINAL & CLEANED JSX (v1.1)          ===
-// ===================================================================
-
+// src/App.jsx (النسخة النهائية مع الإصلاح)
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
-// Import CSS and Utility Functions
 import './App.css';
-import { getBackgroundImage } from './utils/backgrounds';
-import { getRandomCity } from './utils/randomCities';
-
-// Import Components
-import SearchBar from './components/SearchBar';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import DailyForecast from './components/DailyForecast';
 import WeatherChart from './components/WeatherChart';
 import PrecipitationChart from './components/PrecipitationChart';
+import { getBackgroundImage } from './utils/backgrounds';
+import { getRandomCity } from './utils/randomCities';
 
 function App() {
-  // --- STATE MANAGEMENT ---
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isLocating, setIsLocating] = useState(false);
   const [error, setError] = useState(null);
   const [unit, setUnit] = useState('celsius');
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const [lastQuery, setLastQuery] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // --- DATA FETCHING ---
+  useEffect(() => {
+    document.body.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
+
   const fetchWeatherData = useCallback(async (params) => {
     setLoading(true);
     setError(null);
@@ -35,11 +29,20 @@ function App() {
     const queryParams = new URLSearchParams();
     queryParams.append('units', params.unit || unit);
 
-    if (params.city) {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    let finalUrl;
+    let currentQuery;
+
+    if (params.city ) {
+      currentQuery = { type: 'city', value: params.city };
       queryParams.append('city', params.city);
+      finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
     } else if (params.coords) {
+      currentQuery = { type: 'coords', value: params.coords };
       queryParams.append('lat', params.coords.latitude);
       queryParams.append('lon', params.coords.longitude);
+      finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
     } else {
       setError('No city or coordinates provided.');
       setLoading(false);
@@ -47,151 +50,103 @@ function App() {
     }
 
     try {
-      const response = await axios.get(`/api/weather?${queryParams.toString()}`);
-      if (response.data && response.data.current) {
-        setWeatherData(response.data);
-        if (response.data.location?.city) {
-          localStorage.setItem('lastCity', response.data.location.city);
-        }
-      } else {
-        throw new Error('Invalid data structure from server.');
-      }
+      const response = await axios.get(finalUrl);
+      setWeatherData(response.data);
+      setLastQuery(currentQuery);
     } catch (err) {
       console.error("AxiosError:", err);
-      const errorMessage = err.response?.data?.error || 'City not found or network error.';
+      const errorMessage = err.response?.data?.error || 'Failed to fetch data from external API.';
       setError(`Error: ${errorMessage}. Please try again.`);
       setWeatherData(null);
     } finally {
       setLoading(false);
-      setIsLocating(false);
     }
-  }, [unit]); // Re-create this function only if 'unit' changes
+  }, [unit]);
 
-  // --- SIDE EFFECTS (useEffect) ---
-
-  // Effect for initial load: check for last city or get geolocation
-  useEffect(() => {
-    const lastCity = localStorage.getItem('lastCity');
-    if (lastCity) {
-      fetchWeatherData({ city: lastCity });
-    } else if (navigator.geolocation) {
-      setIsLocating(true);
-      navigator.geolocation.getCurrentPosition(
-        (position) => fetchWeatherData({ coords: position.coords }),
-        (err) => {
-          console.error("Geolocation error:", err.message);
-          setIsLocating(false); // Turn off indicator on failure
-        }
-      );
-    }
-  }, [fetchWeatherData]); // Run once on mount
-
-  // Effect for theme changes
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  // --- EVENT HANDLERS ---
-  const handleSearch = (searchCity) => {
-    if (searchCity) {
-      fetchWeatherData({ city: searchCity });
-    }
+  const handleSearch = (city) => {
+    if (city) fetchWeatherData({ city });
   };
 
-  const handleGeoLocate = () => {
+  const handleGeolocate = () => {
     if (navigator.geolocation) {
-      setIsLocating(true);
-      setWeatherData(null); // Clear old data to show locating status
       navigator.geolocation.getCurrentPosition(
-        (position) => fetchWeatherData({ coords: position.coords }),
-        (err) => {
-          setError('Unable to retrieve your location. Please grant permission.');
-          setIsLocating(false);
+        (position) => {
+          fetchWeatherData({ coords: position.coords });
+        },
+        () => {
+          setError('Geolocation permission denied. Please enable it in your browser settings.');
         }
       );
     } else {
-      setError('Geolocation is not supported by your browser.');
+      setError('Geolocation is not supported by this browser.');
     }
   };
 
-  const handleUnitToggle = () => {
+  const toggleUnit = () => {
     const newUnit = unit === 'celsius' ? 'fahrenheit' : 'celsius';
     setUnit(newUnit);
-    
-    if (weatherData) {
-      // Refetch data with the new unit
-      const params = weatherData.location?.city 
-        ? { city: weatherData.location.city, unit: newUnit }
-        : { coords: { latitude: weatherData.location.latitude, longitude: weatherData.location.longitude }, unit: newUnit };
-      fetchWeatherData(params);
+    if (lastQuery) {
+      if (lastQuery.type === 'city') {
+        fetchWeatherData({ city: lastQuery.value, unit: newUnit });
+      } else if (lastQuery.type === 'coords') {
+        fetchWeatherData({ coords: lastQuery.value, unit: newUnit });
+      }
     }
-  };
-
-  const handleThemeToggle = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
   const handleSurpriseMe = () => {
-    const randomCity = getRandomCity();
-    handleSearch(randomCity);
+    const city = getRandomCity();
+    handleSearch(city);
   };
 
-  // --- RENDER LOGIC ---
-  const renderContent = () => {
-    if (isLocating) {
-      return <div className="solid-card welcome-message"><p>Getting your location...</p></div>;
-    }
-    if (loading && !weatherData) { // Show main spinner only on initial load
-      return <div className="loading-spinner"></div>;
-    }
-    if (error) {
-      return <div className="solid-card error-box"><span className="error-icon">⚠️</span><p>{error}</p></div>;
-    }
-    if (weatherData) {
-      return (
-        <>
-          <div className="solid-card">
-            <CurrentWeather data={weatherData.current} location={weatherData.location} />
-          </div>
-          <div className="solid-card">
-            <HourlyForecast data={weatherData.hourly} />
-          </div>
-          <div className="solid-card">
-            <DailyForecast data={weatherData.daily} />
-          </div>
-          <div className="solid-card">
-            <WeatherChart hourlyData={weatherData.hourly} />
-          </div>
-          <div className="solid-card">
-            <PrecipitationChart hourlyData={weatherData.hourly} />
-          </div>
-        </>
-      );
-    }
-    return (
-      <div className="solid-card welcome-message">
-        <h2>Welcome to Weather React!</h2>
-        <p>Search for a city or allow location access to begin.</p>
-      </div>
-    );
+  const toggleDarkMode = () => {
+    setIsDarkMode(prevMode => !prevMode);
   };
+
+  // --- هذا هو الإصلاح ---
+  const backgroundStyle = weatherData
+    ? { backgroundImage: `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})` }
+    : {};
 
   return (
-    <div className="App" style={{ backgroundImage: `url(${getBackgroundImage(weatherData)})` }}>
+    <div className="App" style={backgroundStyle}>
       <div className="main-container">
-        <div className="top-bar solid-card">
-          <SearchBar onSearch={handleSearch} />
+        <div className="top-bar">
+          <form className="search-bar" onSubmit={(e) => { e.preventDefault(); handleSearch(e.target.elements.city.value); }}>
+            <input type="text" name="city" placeholder="Search for a city..." />
+            <button type="submit">Search</button>
+          </form>
           <div className="button-group">
-            <button onClick={handleGeoLocate} title="My Location">📍</button>
-            <button onClick={handleUnitToggle} title="Switch Units">{unit === 'celsius' ? '°F' : '°C'}</button>
-            <button onClick={handleThemeToggle} title="Toggle Theme">{theme === 'light' ? '🌙' : '☀️'}</button>
-            <button onClick={handleSurpriseMe} title="Surprise Me!">🎉</button>
+            <button onClick={handleGeolocate}>📍</button>
+            <button onClick={toggleUnit}>{unit === 'celsius' ? '°C' : '°F'}</button>
+            <button onClick={handleSurpriseMe}>?</button>
+            <button onClick={toggleDarkMode}>{isDarkMode ? '☀️' : '🌙'}</button>
           </div>
         </div>
-        
+
         <div className="content-area">
-          {renderContent()}
+          {loading && <div className="loading-spinner"></div>}
+          {error && <div className="solid-card error-box"><p>⚠️  
+{error}</p></div>}
+          {!loading && !error && !weatherData && (
+            <div className="solid-card welcome-message">
+              <h2>Welcome to Weather React</h2>
+              <p>Enter a city name or use geolocation to get the weather forecast.</p>
+            </div>
+          )}
+          {weatherData && (
+            <>
+              <CurrentWeather data={weatherData} unit={unit} />
+              <HourlyForecast data={weatherData.hourly} unit={unit} />
+              <DailyForecast data={weatherData.daily} unit={unit} />
+              <div className="solid-card chart-container">
+                <WeatherChart hourlyData={weatherData.hourly} unit={unit} />
+              </div>
+              <div className="solid-card chart-container">
+                <PrecipitationChart hourlyData={weatherData.hourly} />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
