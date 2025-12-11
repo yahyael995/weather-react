@@ -1,4 +1,4 @@
-// D:\weather-react\src\utils\backgrounds.js
+// src/utils/backgrounds.js (النسخة النهائية مع الإصلاح النهائي)
 
 import clearDay from '../assets/backgrounds/clear-day.jpg';
 import clearNight from '../assets/backgrounds/clear-night.jpg';
@@ -10,49 +10,51 @@ import snowyDay from '../assets/backgrounds/snowy-day.jpg';
 import snowyNight from '../assets/backgrounds/snowy-night.jpg';
 import thunderstormDay from '../assets/backgrounds/thunderstorm-day.jpg';
 import thunderstormNight from '../assets/backgrounds/thunderstorm-night.jpg';
-import defaultBg from '../assets/backgrounds/default.jpg';
+import defaultDay from '../assets/backgrounds/default.jpg'; // Assuming default is a day image
 
-const weatherBackgrounds = {
-  day: {
-    clear: clearDay, // WMO codes: 0, 1
-    cloudy: cloudyDay, // WMO codes: 2, 3
-    rain: rainyDay, // WMO codes: 51, 53, 55, 61, 63, 65, 80, 81, 82
-    snow: snowyDay, // WMO codes: 71, 73, 75, 85, 86
-    thunderstorm: thunderstormDay, // WMO codes: 95, 96, 99
-  },
-  night: {
-    clear: clearNight,
-    cloudy: cloudyNight,
-    rain: rainyNight,
-    snow: snowyNight,
-    thunderstorm: thunderstormNight,
-  },
+const backgroundMap = {
+  'clear-day': clearDay,
+  'clear-night': clearNight,
+  'cloudy-day': cloudyDay,
+  'cloudy-night': cloudyNight,
+  'rainy-day': rainyDay,
+  'rainy-night': rainyNight,
+  'snowy-day': snowyDay,
+  'snowy-night': snowyNight,
+  'thunderstorm-day': thunderstormDay,
+  'thunderstorm-night': thunderstormNight,
+  'default-day': defaultDay,
+  'default-night': cloudyNight, // Fallback for default night
 };
 
-export const getBackgroundImage = (weatherData) => {
-  if (!weatherData || !weatherData.current) {
-    return defaultBg;
-  }
-
-  const code = weatherData.current.weathercode;
-  const isDay = weatherData.current.is_day === 1;
-  const timeOfDay = isDay ? 'day' : 'night';
-
-  if ([0, 1].includes(code)) {
-    return weatherBackgrounds[timeOfDay].clear;
-  }
-  if ([2, 3].includes(code)) {
-    return weatherBackgrounds[timeOfDay].cloudy;
-  }
-  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
-    return weatherBackgrounds[timeOfDay].rain;
-  }
-  if ([71, 73, 75, 77, 85, 86].includes(code)) {
-    return weatherBackgrounds[timeOfDay].snow;
-  }
-  if ([95, 96, 99].includes(code)) {
-    return weatherBackgrounds[timeOfDay].thunderstorm;
-  }
-
-  return defaultBg;
+const weatherConditions = {
+  0: 'clear',
+  1: 'clear',
+  2: 'cloudy',
+  3: 'cloudy',
+  45: 'cloudy', // Fog
+  48: 'cloudy', // Rime Fog
+  51: 'rainy',
+  53: 'rainy',
+  55: 'rainy',
+  61: 'rainy',
+  63: 'rainy',
+  65: 'rainy',
+  71: 'snowy',
+  73: 'snowy',
+  75: 'snowy',
+  80: 'rainy',
+  81: 'rainy',
+  82: 'rainy',
+  95: 'thunderstorm',
+  96: 'thunderstorm',
+  99: 'thunderstorm',
 };
+
+// --- هذا هو الإصلاح ---
+export function getBackgroundImage(code, is_day) {
+  const condition = weatherConditions[code] || 'default';
+  const timeOfDay = is_day ? 'day' : 'night';
+  const key = `${condition}-${timeOfDay}`;
+  return backgroundMap[key] || backgroundMap['default-day'];
+}
