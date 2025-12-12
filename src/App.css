@@ -107,15 +107,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* This line was already here, it's good */
 }
+
 
 .button-group button:hover {
   background-color: #8884d8;
   color: white;
   border-color: #8884d8;
-  transform: translateY(-2px);
+  transform: scale(1.1) translateY(-2px); /* Make it slightly bigger and lift it */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow on hover */
 }
+
 
 /* --- 4. Content Area & Card Styles --- */
 .content-area {
@@ -175,8 +178,15 @@ body {
   margin-bottom: 8px;
   background-color: var(--hover-bg);
   border-radius: 10px;
+  transition: all 0.3s ease;
 }
 .day-item:last-child { margin-bottom: 0; }
+
+.day-item:hover {
+  transform: translateX(5px); /* Move it slightly to the right */
+  background-color: var(--card-bg); /* Make it pop a bit */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
 /* Charts */
 .chart-container h3 { margin-top: 0; text-align: center; }
@@ -201,4 +211,27 @@ body {
 
 .error-box {
   border-left: 5px solid #e74c3c; /* Red accent for error */
+}
+/* --- 7. Animations & Transitions (New Section) --- */
+
+/* This will make the content area fade in smoothly */
+.content-area {
+  animation: fadeIn 0.75s ease-in-out;
+}
+
+/* Define the fadeIn animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px); /* Start slightly lower */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);   /* End at its normal position */
+  }
+}
+
+/* Add a smooth transition to the welcome/error messages */
+.welcome-message, .error-box {
+    transition: all 0.5s ease;
 }
