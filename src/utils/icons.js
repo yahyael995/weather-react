@@ -1,4 +1,4 @@
-// src/utils/icons.js (النسخة النهائية مع توحيد الخريطتين)
+// src/utils/icons.js (النسخة النهائية مع إصلاح نطاق المتغير)
 
 import clearDay from '../assets/icons/clear-day.svg';
 import clearNight from '../assets/icons/clear-night.svg';
@@ -10,80 +10,43 @@ import rain from '../assets/icons/rain.svg';
 import snow from '../assets/icons/snow.svg';
 import thunderstorm from '../assets/icons/thunderstorm.svg';
 
-// --- هذا هو الجزء الذي تم تحديثه بالكامل ---
 const iconMap = {
-  0: clearDay,
-  1: partlyCloudyDay,
-  2: cloudy,
-  3: cloudy,
-  45: fog,
-  48: fog,
-  51: rain,
-  53: rain,
-  55: rain,
-  56: rain,
-  57: rain,
-  61: rain,
-  63: rain,
-  65: rain,
-  66: rain,
-  67: rain,
-  71: snow,
-  73: snow,
-  75: snow,
-  77: snow,
-  80: rain,
-  81: rain,
-  82: rain,
-  85: snow,
-  86: snow,
-  95: thunderstorm,
-  96: thunderstorm,
-  99: thunderstorm,
+  0: clearDay, 1: partlyCloudyDay, 2: cloudy, 3: cloudy, 45: fog, 48: fog,
+  51: rain, 53: rain, 55: rain, 56: rain, 57: rain, 61: rain, 63: rain,
+  65: rain, 66: rain, 67: rain, 71: snow, 73: snow, 75: snow, 77: snow,
+  80: rain, 81: rain, 82: rain, 85: snow, 86: snow, 95: thunderstorm,
+  96: thunderstorm, 99: thunderstorm,
 };
 
 const descriptionMap = {
-    0: 'Clear Sky',
-    1: 'Mainly Clear',
-    2: 'Partly Cloudy',
-    3: 'Overcast',
-    45: 'Fog',
-    48: 'Rime Fog',
-    51: 'Light Drizzle',
-    53: 'Drizzle',
-    55: 'Dense Drizzle',
-    56: 'Light Freezing Drizzle',
-    57: 'Dense Freezing Drizzle',
-    61: 'Slight Rain',
-    63: 'Rain',
-    65: 'Heavy Rain',
-    66: 'Light Freezing Rain',
-    67: 'Heavy Freezing Rain',
-    71: 'Slight Snowfall',
-    73: 'Snowfall',
-    75: 'Heavy Snowfall',
-    77: 'Snow Grains',
-    80: 'Slight Rain Showers',
-    81: 'Rain Showers',
-    82: 'Violent Rain Showers',
-    85: 'Slight Snow Showers',
-    86: 'Heavy Snow Showers',
-    95: 'Thunderstorm',
-    96: 'Thunderstorm with Hail',
+    0: 'Clear Sky', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
+    45: 'Fog', 48: 'Rime Fog', 51: 'Light Drizzle', 53: 'Drizzle',
+    55: 'Dense Drizzle', 56: 'Light Freezing Drizzle', 57: 'Dense Freezing Drizzle',
+    61: 'Slight Rain', 63: 'Rain', 65: 'Heavy Rain', 66: 'Light Freezing Rain',
+    67: 'Heavy Freezing Rain', 71: 'Slight Snowfall', 73: 'Snowfall',
+    75: 'Heavy Snowfall', 77: 'Snow Grains', 80: 'Slight Rain Showers',
+    81: 'Rain Showers', 82: 'Violent Rain Showers', 85: 'Slight Snow Showers',
+    86: 'Heavy Snow Showers', 95: 'Thunderstorm', 96: 'Thunderstorm with Hail',
     99: 'Thunderstorm with Hail',
 };
 
-// src/utils/icons.js (تحديث دالة الأيقونة)
+// --- هذا هو الإصلاح الكامل ---
+const weatherConditions = {
+    0: 'clear', 1: 'clear', 2: 'cloudy', 3: 'cloudy', 45: 'cloudy', 48: 'cloudy',
+    51: 'rainy', 53: 'rainy', 55: 'rainy', 61: 'rainy', 63: 'rainy', 65: 'rainy',
+    71: 'snowy', 73: 'snowy', 75: 'snowy', 80: 'rainy', 81: 'rainy', 82: 'rainy',
+    95: 'thunderstorm', 96: 'thunderstorm', 99: 'thunderstorm',
+};
 
-export function getWeatherIcon(code, is_day = 1) { // افترض أنه نهار إذا لم يتم توفير القيمة
-  const condition = weatherConditions[code] || 'default';
-  
-  if (condition === 'clear' && !is_day) {
-    return clearNight;
-  }
-  if (condition === 'cloudy' && !is_day) {
-    return partlyCloudyNight; // استخدم أيقونة ليلية مناسبة للغيوم
-  }
+export function getWeatherIcon(code, is_day = 1) {
+  const condition = weatherConditions[code];
+
+  if (condition === 'clear' && !is_day) return clearNight;
+  if (condition === 'cloudy' && !is_day) return partlyCloudyNight;
   
   return iconMap[code] || cloudy;
+}
+
+export function getWeatherDescription(code) {
+    return descriptionMap[code] || 'Unknown';
 }
