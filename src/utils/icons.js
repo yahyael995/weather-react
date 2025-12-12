@@ -73,10 +73,17 @@ const descriptionMap = {
     99: 'Thunderstorm with Hail',
 };
 
-export function getWeatherIcon(code) {
-  return iconMap[code] || cloudy;
-}
+// src/utils/icons.js (تحديث دالة الأيقونة)
 
-export function getWeatherDescription(code) {
-    return descriptionMap[code] || 'Unknown';
+export function getWeatherIcon(code, is_day = 1) { // افترض أنه نهار إذا لم يتم توفير القيمة
+  const condition = weatherConditions[code] || 'default';
+  
+  if (condition === 'clear' && !is_day) {
+    return clearNight;
+  }
+  if (condition === 'cloudy' && !is_day) {
+    return partlyCloudyNight; // استخدم أيقونة ليلية مناسبة للغيوم
+  }
+  
+  return iconMap[code] || cloudy;
 }

@@ -1,36 +1,49 @@
-// src/components/HourlyForecast.jsx (النسخة النهائية مع فحص الأمان)
+// src/components/HourlyForecast.jsx (النسخة النهائية مع منطق الوقت الصحيح)
 
 import React from 'react';
 import { getWeatherIcon } from '../utils/icons';
 
 const HourlyForecast = ({ data, unit }) => {
-  // --- هذا هو فحص الأمان الذي يحل المشكلة ---
-  // إذا لم تكن البيانات أو الوقت موجودًا، لا تعرض أي شيء
   if (!data || !data.time) {
-    return null; // أو يمكنك عرض رسالة "جاري التحميل..."
+    return null;
   }
 
   const tempUnitLabel = unit === 'celsius' ? '°C' : '°F';
 
-  // اعرض فقط الـ 24 ساعة القادمة
-  const next24Hours = data.time.slice(0, 24);
+  // --- هذا هو الإصلاح الكامل ---
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // 1. ابحث عن فهرس الساعة الحالية في بيانات واجهة برمجة التطبيقات
+  const startIndex = data.time.findIndex(timeStr => new Date(timeStr).getHours() === currentHour);
+
+  // 2. إذا لم نجد الساعة الحالية (نادر جدًا)، ابدأ من الصفر
+  const validStartIndex = startIndex === -1 ? 0 : startIndex;
+
+  // 3. اقطع البيانات لتبدأ من الساعة الحالية وتأخذ الـ 24 ساعة التالية
+  const forecastHours = data.time.slice(validStartIndex, validStartIndex + 24);
 
   return (
     <div className="solid-card hourly-forecast">
       <h3>Hourly Forecast</h3>
       <div className="hourly-scroll">
-        {next24Hours.map((time, index) => {
-          const hour = new Date(time).getHours();
+        {forecastHours.map((time, index) => {
+          const actualIndex = validStartIndex + index; // هذا هو الفهرس الحقيقي في البيانات الأصلية
+          const date = new Date(time);
+          const hour = date.getHours();
           const displayHour = hour === 0 ? '12am' : hour === 12 ? '12pm' : hour > 12 ? `${hour - 12}pm` : `${hour}am`;
           
-          // --- هذا هو فحص الأمان الإضافي داخل الـ map ---
-          const iconCode = data.weather_code ? data.weather_code[index] : 0;
-          const temperature = data.temperature_2m ? Math.round(data.temperature_2m[index]) : 'N/A';
+          // استخدم الفهرس الحقيقي للحصول على البيانات الصحيحة
+          const iconCode = data.weathercode[actualIndex];
+          const temperature = Math.round(data.temperature_2m[actualIndex]);
+          // --- هذا هو الإصلاح: استخدم is_day من بيانات الساعة ---
+          const isDay = data.is_day[actualIndex];
 
           return (
-            <div key={index} className="hour-item">
+            <div key={actualIndex} className="hour-item">
               <span>{index === 0 ? 'Now' : displayHour}</span>
-              <img src={getWeatherIcon(iconCode)} alt="Weather icon" className="weather-icon-small" />
+              {/* --- هذا هو الإصلاح: مرر isDay إلى دالة الأيقونة --- */}
+              <img src={getWeatherIcon(iconCode, isDay)} alt="Weather icon" className="weather-icon-small" />
               <span>{temperature}{tempUnitLabel}</span>
             </div>
           );
