@@ -148,7 +148,7 @@ function App() {
               <p>Enter a city name or use geolocation to get the weather forecast.</p>
             </div>
           )}
-          // هذا هو الكود الجديد
+          
 {weatherData && (
   <>
     <CurrentWeather data={weatherData} unit={unit} />
