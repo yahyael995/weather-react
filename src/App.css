@@ -235,3 +235,49 @@ body {
 .welcome-message, .error-box {
     transition: all 0.5s ease;
 }
+/* --- 8. Mobile Responsiveness (New Section) --- */
+
+/* This block of CSS will only apply to screens 640px wide or smaller */
+@media (max-width: 640px) {
+
+  /* Reduce overall padding for the app to save space */
+  .App {
+    padding: 10px;
+  }
+
+  /* Allow the top bar to wrap more gracefully */
+  .top-bar {
+    flex-direction: column; /* Stack search bar and buttons vertically */
+    gap: 15px;
+  }
+
+  .search-bar {
+    width: 100%; /* Make search bar take full width */
+  }
+
+  .button-group {
+    justify-content: center; /* Center the buttons */
+    width: 100%;
+  }
+
+  /* Reduce the size of the main temperature display */
+  .current-weather h1 {
+    font-size: 3.5em; /* Was 4em */
+  }
+
+  /* Reduce the size of the location name */
+  .current-weather .location {
+    font-size: 1.5em; /* Was 2em */
+  }
+
+  /* Reduce padding inside the cards to make more room for content */
+  .solid-card {
+    padding: 15px;
+  }
+
+  /* Make the font in the daily forecast slightly smaller */
+  .day-item {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+}
