@@ -7,8 +7,8 @@ import './App.css';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import DailyForecast from './components/DailyForecast';
-import WeatherChart from './components/WeatherChart';
-import PrecipitationChart from './components/PrecipitationChart';
+const WeatherChart = React.lazy(() => import('./components/WeatherChart'));
+const PrecipitationChart = React.lazy(() => import('./components/PrecipitationChart'));
 import { getBackgroundImage } from './utils/backgrounds';
 import { getRandomCity } from './utils/randomCities';
 import defaultBackground from './assets/backgrounds/default.jpg';
@@ -148,19 +148,25 @@ function App() {
               <p>Enter a city name or use geolocation to get the weather forecast.</p>
             </div>
           )}
-          {weatherData && (
-            <>
-              <CurrentWeather data={weatherData} unit={unit} />
-              <HourlyForecast data={weatherData.hourly} unit={unit} />
-              <DailyForecast data={weatherData.daily} unit={unit} />
-              <div className="solid-card chart-container">
-                <WeatherChart hourlyData={weatherData.hourly} unit={unit} />
-              </div>
-              <div className="solid-card chart-container">
-                <PrecipitationChart hourlyData={weatherData.hourly} />
-              </div>
-            </>
-          )}
+          // هذا هو الكود الجديد
+{weatherData && (
+  <>
+    <CurrentWeather data={weatherData} unit={unit} />
+    <HourlyForecast data={weatherData.hourly} unit={unit} />
+    <DailyForecast data={weatherData.daily} unit={unit} />
+    
+    {/* --- هذا هو التغيير --- */}
+    <React.Suspense fallback={<div className="loading-spinner"></div>}>
+      <div className="solid-card chart-container">
+        <WeatherChart hourlyData={weatherData.hourly} unit={unit} />
+      </div>
+      <div className="solid-card chart-container">
+        <PrecipitationChart hourlyData={weatherData.hourly} />
+      </div>
+    </React.Suspense>
+  </>
+)}
+
         </div>
       </div>
     </div>
