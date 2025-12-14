@@ -1,8 +1,8 @@
-// src/App.jsx (النسخة المبسطة بعد إعادة الهيكلة)
+// src/App.jsx (النسخة النهائية مع الجلب التلقائي عند التحميل)
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { useWeather } from './hooks/useWeather'; // <-- استيراد الـ Hook الجديد
+import { useWeather } from './hooks/useWeather';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import DailyForecast from './components/DailyForecast';
@@ -10,12 +10,10 @@ import { getBackgroundImage } from './utils/backgrounds';
 import { getRandomCity } from './utils/randomCities';
 import defaultBackground from './assets/backgrounds/default.jpg';
 
-// التحميل الكسول للمكونات الثقيلة
 const WeatherChart = React.lazy(() => import('./components/WeatherChart'));
 const PrecipitationChart = React.lazy(() => import('./components/PrecipitationChart'));
 
 function App() {
-  // --- استخدام الـ Hook المخصص ---
   const {
     weatherData,
     loading,
@@ -26,14 +24,19 @@ function App() {
     setError,
   } = useWeather();
 
-  // حالة الوضع الليلي تبقى هنا لأنها تؤثر على body مباشرة
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle('dark', isDarkMode);
   }, [isDarkMode]);
 
-  // --- دوال معالجة الأحداث (أصبحت أبسط) ---
+  // --- هذا هو التأثير الجديد ---
+  // يعمل مرة واحدة فقط عند تحميل التطبيق لأول مرة
+  useEffect(() => {
+    // استدعاء دالة تحديد الموقع الجغرافي تلقائيًا
+    handleGeolocate();
+  }, []); // المصفوفة الفارغة [] تضمن أن هذا التأثير يعمل مرة واحدة فقط
+
   const handleSearch = (city) => {
     if (city) fetchWeatherData({ city });
   };
@@ -42,7 +45,7 @@ function App() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => fetchWeatherData({ coords: position.coords }),
-        () => setError('Geolocation permission denied. Please enable it in your browser settings.')
+        () => setError('Geolocation permission denied. To see local weather, please enable it in your browser settings and refresh the page.')
       );
     } else {
       setError('Geolocation is not supported by this browser.');
@@ -58,14 +61,12 @@ function App() {
     setIsDarkMode(prevMode => !prevMode);
   };
 
-  // --- منطق العرض (لا تغيير هنا) ---
   const backgroundStyle = {
     backgroundImage: weatherData
       ? `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})`
       : `url(${defaultBackground})`
   };
 
-  // --- بنية JSX (لا تغيير هنا) ---
   return (
     <div className="App" style={backgroundStyle}>
       <div className="main-container">
@@ -89,7 +90,7 @@ function App() {
           {!loading && !error && !weatherData && (
             <div className="solid-card welcome-message">
               <h2>Welcome to Weather React</h2>
-              <p>Enter a city name or use geolocation to get the weather forecast.</p>
+              <p>Attempting to get your local weather...</p>
             </div>
           )}
           {weatherData && (
