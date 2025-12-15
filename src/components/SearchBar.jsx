@@ -1,28 +1,33 @@
-// D:\weather-react\src\components\SearchBar.jsx
+// src/components/SearchBar.jsx
 
 import React, { useState } from 'react';
 
-function SearchBar({ onSearch }) {
+const SearchBar = ({ onSearch, loading }) => {
   const [city, setCity] = useState('');
 
-  const handleSearch = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (city.trim()) {
-      onSearch(city.trim());
+    if (city && !loading) {
+      onSearch(city);
+      setCity(''); // مسح الحقل بعد البحث
     }
   };
 
   return (
-    <form onSubmit={handleSearch} className="search-bar">
+    <form className="search-bar" onSubmit={handleSubmit}>
       <input
         type="text"
+        name="city"
+        placeholder="Search for a city..."
         value={city}
         onChange={(e) => setCity(e.target.value)}
-        placeholder="Search for a city..."
+        disabled={loading} // تعطيل الحقل أثناء التحميل
       />
-      <button type="submit">Search</button>
+      <button type="submit" disabled={loading}>
+        {loading ? 'Searching...' : 'Search'} 
+      </button>
     </form>
   );
-}
+};
 
 export default SearchBar;

@@ -1,8 +1,9 @@
-// src/App.jsx (النسخة النهائية مع الجلب التلقائي عند التحميل)
+// src/App.jsx (النسخة النهائية مع مكون البحث المحسّن)
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useWeather } from './hooks/useWeather';
+import SearchBar from './components/SearchBar'; // <-- استيراد المكون الجديد
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import DailyForecast from './components/DailyForecast';
@@ -30,12 +31,9 @@ function App() {
     document.body.classList.toggle('dark', isDarkMode);
   }, [isDarkMode]);
 
-  // --- هذا هو التأثير الجديد ---
-  // يعمل مرة واحدة فقط عند تحميل التطبيق لأول مرة
   useEffect(() => {
-    // استدعاء دالة تحديد الموقع الجغرافي تلقائيًا
     handleGeolocate();
-  }, []); // المصفوفة الفارغة [] تضمن أن هذا التأثير يعمل مرة واحدة فقط
+  }, []);
 
   const handleSearch = (city) => {
     if (city) fetchWeatherData({ city });
@@ -71,15 +69,14 @@ function App() {
     <div className="App" style={backgroundStyle}>
       <div className="main-container">
         <div className="top-bar">
-          <form className="search-bar" onSubmit={(e) => { e.preventDefault(); handleSearch(e.target.elements.city.value); }}>
-            <input type="text" name="city" placeholder="Search for a city..." />
-            <button type="submit">Search</button>
-          </form>
+          {/* --- هذا هو التغيير: استخدام المكون الجديد --- */}
+          <SearchBar onSearch={handleSearch} loading={loading} />
+          
           <div className="button-group">
-            <button onClick={handleGeolocate}>📍</button>
-            <button onClick={toggleUnit}>{unit === 'celsius' ? '°C' : '°F'}</button>
-            <button onClick={handleSurpriseMe}>?</button>
-            <button onClick={toggleDarkMode}>{isDarkMode ? '☀️' : '🌙'}</button>
+            <button onClick={handleGeolocate} disabled={loading}>📍</button>
+            <button onClick={toggleUnit} disabled={loading}>{unit === 'celsius' ? '°C' : '°F'}</button>
+            <button onClick={handleSurpriseMe} disabled={loading}>?</button>
+            <button onClick={toggleDarkMode} disabled={loading}>{isDarkMode ? '☀️' : '🌙'}</button>
           </div>
         </div>
 
