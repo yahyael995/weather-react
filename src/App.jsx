@@ -1,9 +1,9 @@
-// src/App.jsx (النسخة النهائية مع مكون البحث المحسّن)
+// src/App.jsx (النسخة النهائية مع رسائل حالة محسّنة)
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useWeather } from './hooks/useWeather';
-import SearchBar from './components/SearchBar'; // <-- استيراد المكون الجديد
+import SearchBar from './components/SearchBar';
 import CurrentWeather from './components/CurrentWeather';
 import HourlyForecast from './components/HourlyForecast';
 import DailyForecast from './components/DailyForecast';
@@ -69,9 +69,7 @@ function App() {
     <div className="App" style={backgroundStyle}>
       <div className="main-container">
         <div className="top-bar">
-          {/* --- هذا هو التغيير: استخدام المكون الجديد --- */}
           <SearchBar onSearch={handleSearch} loading={loading} />
-          
           <div className="button-group">
             <button onClick={handleGeolocate} disabled={loading}>📍</button>
             <button onClick={toggleUnit} disabled={loading}>{unit === 'celsius' ? '°C' : '°F'}</button>
@@ -87,7 +85,7 @@ function App() {
           {!loading && !error && !weatherData && (
             <div className="solid-card welcome-message">
               <h2>Welcome to Weather React</h2>
-              <p>Attempting to get your local weather...</p>
+              <p>Enter a city name or use the location button to get the weather forecast.</p>
             </div>
           )}
           {weatherData && (
