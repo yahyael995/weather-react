@@ -1,4 +1,4 @@
-// src/App.jsx (النسخة النهائية مع رسائل حالة محسّنة)
+// src/App.jsx (النسخة النهائية مع عنوان ديناميكي)
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
@@ -34,6 +34,18 @@ function App() {
   useEffect(() => {
     handleGeolocate();
   }, []);
+
+  // --- هذا هو التأثير الجديد ---
+  useEffect(() => {
+    if (weatherData) {
+      const temp = Math.round(weatherData.current.temperature_2m);
+      const city = weatherData.location.name;
+      const tempUnit = unit === 'celsius' ? '°C' : '°F';
+      document.title = `${temp}${tempUnit} in ${city} - Weather React`;
+    } else {
+      document.title = 'Weather React';
+    }
+  }, [weatherData, unit]); // أضفنا unit هنا لتحديث العنوان عند تغيير الوحدة
 
   const handleSearch = (city) => {
     if (city) fetchWeatherData({ city });
