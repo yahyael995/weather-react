@@ -72,7 +72,6 @@ export const useWeather = () => {
     loading,
     error,
     unit,
-    isDarkMode: false, // Will be managed in App.jsx for now
     fetchWeatherData,
     toggleUnit,
     setError, // Expose setError to be used for geolocation denial
