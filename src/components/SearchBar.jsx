@@ -24,7 +24,7 @@ const SearchBar = ({ onSearch, loading }) => {
         disabled={loading} // تعطيل الحقل أثناء التحميل
       />
       <button type="submit" disabled={loading}>
-        {loading ? 'Searching...' : 'Search'} 
+        {loading ? 'Searching...' : 'Search'}
       </button>
     </form>
   );

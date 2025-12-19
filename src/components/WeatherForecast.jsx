@@ -8,7 +8,8 @@ const getDayName = (dateString) => {
 };
 
 function WeatherForecast({ data }) {
-  const { time, weathercode, temperature_2m_max, temperature_2m_min } = data.daily;
+  const { time, weathercode, temperature_2m_max, temperature_2m_min } =
+    data.daily;
 
   return (
     <div className="forecast-container">
@@ -27,7 +28,9 @@ function WeatherForecast({ data }) {
             <tr key={date}>
               <td>{getDayName(date)}</td>
               {/* 2. استخدام مكون الأيقونة بدلاً من الرقم */}
-              <td><WeatherIcon code={weathercode[index]} /></td>
+              <td>
+                <WeatherIcon code={weathercode[index]} />
+              </td>
               <td>{temperature_2m_max[index]}°</td>
               <td>{temperature_2m_min[index]}°</td>
             </tr>

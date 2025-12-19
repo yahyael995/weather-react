@@ -1,7 +1,9 @@
 /* D:/weather-react/src/components/WeatherChart.css */
 
 .weather-chart {
-  background-color: var(--container-bg); /* This is the key property for the background */
+  background-color: var(
+    --container-bg
+  ); /* This is the key property for the background */
   padding: 20px;
   border-radius: 15px;
   margin-top: 20px;

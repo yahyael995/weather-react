@@ -7,9 +7,12 @@ const API_BASE_URL = 'http://localhost:3001/weather';
 // 2. تعديل دالة getCoordinates (لا تزال تتحدث مع Open-Meteo مباشرة )
 // (لا تغيير هنا، يمكننا نقلها إلى الـ Backend لاحقًا ولكن لنبقها بسيطة الآن)
 export const getCoordinates = async (cityName) => {
-  const response = await axios.get('https://geocoding-api.open-meteo.com/v1/search', {
-    params: { name: cityName, count: 1 },
-  } );
+  const response = await axios.get(
+    'https://geocoding-api.open-meteo.com/v1/search',
+    {
+      params: { name: cityName, count: 1 },
+    }
+  );
   if (response.data.results && response.data.results.length > 0) {
     return response.data.results[0];
   } else {

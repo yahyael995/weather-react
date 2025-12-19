@@ -12,7 +12,9 @@ import { getRandomCity } from './utils/randomCities';
 import defaultBackground from './assets/backgrounds/default.jpg';
 
 const WeatherChart = React.lazy(() => import('./components/WeatherChart'));
-const PrecipitationChart = React.lazy(() => import('./components/PrecipitationChart'));
+const PrecipitationChart = React.lazy(
+  () => import('./components/PrecipitationChart')
+);
 
 function App() {
   const {
@@ -55,7 +57,10 @@ function App() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => fetchWeatherData({ coords: position.coords }),
-        () => setError('Geolocation permission denied. To see local weather, please enable it in your browser settings and refresh the page.')
+        () =>
+          setError(
+            'Geolocation permission denied. To see local weather, please enable it in your browser settings and refresh the page.'
+          )
       );
     } else {
       setError('Geolocation is not supported by this browser.');
@@ -68,13 +73,13 @@ function App() {
   };
 
   const toggleDarkMode = () => {
-    setIsDarkMode(prevMode => !prevMode);
+    setIsDarkMode((prevMode) => !prevMode);
   };
 
   const backgroundStyle = {
     backgroundImage: weatherData
       ? `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})`
-      : `url(${defaultBackground})`
+      : `url(${defaultBackground})`,
   };
 
   return (
@@ -83,21 +88,38 @@ function App() {
         <div className="top-bar">
           <SearchBar onSearch={handleSearch} loading={loading} />
           <div className="button-group">
-            <button onClick={handleGeolocate} disabled={loading}>📍</button>
-            <button onClick={toggleUnit} disabled={loading}>{unit === 'celsius' ? '°C' : '°F'}</button>
-            <button onClick={handleSurpriseMe} disabled={loading}>?</button>
-            <button onClick={toggleDarkMode} disabled={loading}>{isDarkMode ? '☀️' : '🌙'}</button>
+            <button onClick={handleGeolocate} disabled={loading}>
+              📍
+            </button>
+            <button onClick={toggleUnit} disabled={loading}>
+              {unit === 'celsius' ? '°C' : '°F'}
+            </button>
+            <button onClick={handleSurpriseMe} disabled={loading}>
+              ?
+            </button>
+            <button onClick={toggleDarkMode} disabled={loading}>
+              {isDarkMode ? '☀️' : '🌙'}
+            </button>
           </div>
         </div>
 
         <div className="content-area">
           {loading && <div className="loading-spinner"></div>}
-          {error && <div className="solid-card error-box"><p>⚠️  
-{error}</p></div>}
+          {error && (
+            <div className="solid-card error-box">
+              <p>
+                ⚠️
+                {error}
+              </p>
+            </div>
+          )}
           {!loading && !error && !weatherData && (
             <div className="solid-card welcome-message">
               <h2>Welcome to Weather React</h2>
-              <p>Enter a city name or use the location button to get the weather forecast.</p>
+              <p>
+                Enter a city name or use the location button to get the weather
+                forecast.
+              </p>
             </div>
           )}
           {weatherData && (
@@ -105,7 +127,9 @@ function App() {
               <CurrentWeather data={weatherData} unit={unit} />
               <HourlyForecast data={weatherData.hourly} unit={unit} />
               <DailyForecast data={weatherData.daily} unit={unit} />
-              <React.Suspense fallback={<div className="loading-spinner"></div>}>
+              <React.Suspense
+                fallback={<div className="loading-spinner"></div>}
+              >
                 <div className="solid-card chart-container">
                   <WeatherChart hourlyData={weatherData.hourly} unit={unit} />
                 </div>

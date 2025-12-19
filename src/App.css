@@ -21,9 +21,9 @@ body.dark {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-color);
@@ -35,7 +35,7 @@ body {
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box; /* Ensures padding doesn't add to the width/height */
-  
+
   /* Centering the main content container */
   display: flex;
   justify-content: center;
@@ -110,7 +110,6 @@ body {
   transition: all 0.3s ease; /* This line was already here, it's good */
 }
 
-
 .button-group button:hover {
   background-color: #8884d8;
   color: white;
@@ -118,7 +117,6 @@ body {
   transform: scale(1.1) translateY(-2px); /* Make it slightly bigger and lift it */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow on hover */
 }
-
 
 /* --- 4. Content Area & Card Styles --- */
 .content-area {
@@ -143,13 +141,27 @@ body {
 .current-weather {
   text-align: center;
 }
-.current-weather h1 { margin: 0; font-size: 4em; }
-.current-weather .location { font-size: 2em; margin: 0; }
-.current-weather .description { font-size: 1.2em; text-transform: capitalize; }
-.current-weather .details { margin-top: 20px; }
+.current-weather h1 {
+  margin: 0;
+  font-size: 4em;
+}
+.current-weather .location {
+  font-size: 2em;
+  margin: 0;
+}
+.current-weather .description {
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
+.current-weather .details {
+  margin-top: 20px;
+}
 
 /* Hourly Forecast */
-.hourly-forecast h3 { margin-top: 0; margin-bottom: 15px; }
+.hourly-forecast h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
 .hourly-scroll {
   display: flex;
   overflow-x: auto;
@@ -166,10 +178,15 @@ body {
   background-color: var(--hover-bg);
   border-radius: 10px;
 }
-.hour-item:last-child { margin-right: 0; }
+.hour-item:last-child {
+  margin-right: 0;
+}
 
 /* Daily Forecast */
-.daily-forecast h3 { margin-top: 0; margin-bottom: 15px; }
+.daily-forecast h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
 .day-item {
   display: flex;
   justify-content: space-between;
@@ -180,7 +197,9 @@ body {
   border-radius: 10px;
   transition: all 0.3s ease;
 }
-.day-item:last-child { margin-bottom: 0; }
+.day-item:last-child {
+  margin-bottom: 0;
+}
 
 .day-item:hover {
   transform: translateX(5px); /* Move it slightly to the right */
@@ -189,7 +208,10 @@ body {
 }
 
 /* Charts */
-.chart-container h3 { margin-top: 0; text-align: center; }
+.chart-container h3 {
+  margin-top: 0;
+  text-align: center;
+}
 
 /* --- 6. Status Indicators (Loading, Error, Welcome) --- */
 .loading-spinner {
@@ -202,9 +224,14 @@ body {
   animation: spin 1s ease-in-out infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-.error-box, .welcome-message {
+.error-box,
+.welcome-message {
   text-align: center;
   padding: 40px 20px;
 }
@@ -227,19 +254,19 @@ body {
   }
   to {
     opacity: 1;
-    transform: translateY(0);   /* End at its normal position */
+    transform: translateY(0); /* End at its normal position */
   }
 }
 
 /* Add a smooth transition to the welcome/error messages */
-.welcome-message, .error-box {
-    transition: all 0.5s ease;
+.welcome-message,
+.error-box {
+  transition: all 0.5s ease;
 }
 /* --- 8. Mobile Responsiveness (New Section) --- */
 
 /* This block of CSS will only apply to screens 640px wide or smaller */
 @media (max-width: 640px) {
-
   /* Reduce overall padding for the app to save space */
   .App {
     padding: 10px;

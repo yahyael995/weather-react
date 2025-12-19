@@ -10,50 +10,57 @@ export const useWeather = () => {
   const [unit, setUnit] = useState('celsius');
   const [lastQuery, setLastQuery] = useState(null);
 
-  const fetchWeatherData = useCallback(async (params) => {
-    setLoading(true);
-    setError(null);
-    
-    const queryParams = new URLSearchParams();
-    queryParams.append('units', params.unit || unit);
+  const fetchWeatherData = useCallback(
+    async (params) => {
+      setLoading(true);
+      setError(null);
 
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+      const queryParams = new URLSearchParams();
+      queryParams.append('units', params.unit || unit);
 
-    let finalUrl;
-    let currentQuery;
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    if (params.city) {
-      currentQuery = { type: 'city', value: params.city };
-      queryParams.append('city', params.city);
-      finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
-    } else if (params.coords) {
-      currentQuery = { type: 'coords', value: params.coords };
-      queryParams.append('lat', params.coords.latitude);
-      queryParams.append('lon', params.coords.longitude);
-      finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
-    } else {
-      setError('No city or coordinates provided.');
-      setLoading(false);
-      return;
-    }
+      let finalUrl;
+      let currentQuery;
 
-    try {
-      const response = await axios.get(finalUrl, { timeout: 10000 });
-      setWeatherData(response.data);
-      setLastQuery(currentQuery);
-    } catch (err) {
-      console.error("AxiosError:", err);
-      if (err.code === 'ECONNABORTED') {
-        setError('Error: The request took too long to respond. Please check your internet connection and try again.');
+      if (params.city) {
+        currentQuery = { type: 'city', value: params.city };
+        queryParams.append('city', params.city);
+        finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
+      } else if (params.coords) {
+        currentQuery = { type: 'coords', value: params.coords };
+        queryParams.append('lat', params.coords.latitude);
+        queryParams.append('lon', params.coords.longitude);
+        finalUrl = `${API_BASE_URL}/weather?${queryParams.toString()}`;
       } else {
-        const errorMessage = err.response?.data?.error || 'Failed to fetch data from external API.';
-        setError(`Error: ${errorMessage}. Please try again.`);
+        setError('No city or coordinates provided.');
+        setLoading(false);
+        return;
       }
-      setWeatherData(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [unit]);
+
+      try {
+        const response = await axios.get(finalUrl, { timeout: 10000 });
+        setWeatherData(response.data);
+        setLastQuery(currentQuery);
+      } catch (err) {
+        console.error('AxiosError:', err);
+        if (err.code === 'ECONNABORTED') {
+          setError(
+            'Error: The request took too long to respond. Please check your internet connection and try again.'
+          );
+        } else {
+          const errorMessage =
+            err.response?.data?.error ||
+            'Failed to fetch data from external API.';
+          setError(`Error: ${errorMessage}. Please try again.`);
+        }
+        setWeatherData(null);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [unit]
+  );
 
   const toggleUnit = () => {
     const newUnit = unit === 'celsius' ? 'fahrenheit' : 'celsius';

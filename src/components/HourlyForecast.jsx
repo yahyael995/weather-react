@@ -15,7 +15,9 @@ const HourlyForecast = ({ data, unit }) => {
   const currentHour = now.getHours();
 
   // 1. ابحث عن فهرس الساعة الحالية في بيانات واجهة برمجة التطبيقات
-  const startIndex = data.time.findIndex(timeStr => new Date(timeStr).getHours() === currentHour);
+  const startIndex = data.time.findIndex(
+    (timeStr) => new Date(timeStr).getHours() === currentHour
+  );
 
   // 2. إذا لم نجد الساعة الحالية (نادر جدًا)، ابدأ من الصفر
   const validStartIndex = startIndex === -1 ? 0 : startIndex;
@@ -31,8 +33,15 @@ const HourlyForecast = ({ data, unit }) => {
           const actualIndex = validStartIndex + index; // هذا هو الفهرس الحقيقي في البيانات الأصلية
           const date = new Date(time);
           const hour = date.getHours();
-          const displayHour = hour === 0 ? '12am' : hour === 12 ? '12pm' : hour > 12 ? `${hour - 12}pm` : `${hour}am`;
-          
+          const displayHour =
+            hour === 0
+              ? '12am'
+              : hour === 12
+                ? '12pm'
+                : hour > 12
+                  ? `${hour - 12}pm`
+                  : `${hour}am`;
+
           // استخدم الفهرس الحقيقي للحصول على البيانات الصحيحة
           const iconCode = data.weathercode[actualIndex];
           const temperature = Math.round(data.temperature_2m[actualIndex]);
@@ -43,8 +52,15 @@ const HourlyForecast = ({ data, unit }) => {
             <div key={actualIndex} className="hour-item">
               <span>{index === 0 ? 'Now' : displayHour}</span>
               {/* --- هذا هو الإصلاح: مرر isDay إلى دالة الأيقونة --- */}
-              <img src={getWeatherIcon(iconCode, isDay)} alt="Weather icon" className="weather-icon-small" />
-              <span>{temperature}{tempUnitLabel}</span>
+              <img
+                src={getWeatherIcon(iconCode, isDay)}
+                alt="Weather icon"
+                className="weather-icon-small"
+              />
+              <span>
+                {temperature}
+                {tempUnitLabel}
+              </span>
             </div>
           );
         })}

@@ -17,9 +17,7 @@ const WeatherIcon = ({ code, isDay }) => {
   const icon = getWeatherIcon(code, isDay);
 
   // Return the icon inside a span with a CLASS, not an inline style
-  return (
-    <span className="weather-icon">{icon}</span>
-  );
+  return <span className="weather-icon">{icon}</span>;
 };
 
 export default WeatherIcon;
