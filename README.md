@@ -1,37 +1,68 @@
-# Weather React App
+# Weather React 🌦️
 
-A complete, full-stack weather application built with React for the frontend and Node.js/Express for the backend. This project fetches real-time weather data from the Open-Meteo API and presents it in a clean, responsive, and user-friendly interface.
+A clean, modern, and responsive weather forecast application built with React and Vite. It provides real-time weather data, hourly and daily forecasts, and dynamic backgrounds that change with the weather conditions.
 
----
+**➡️ [Live Demo](https://weather-react-xi-five.vercel.app/ ) ⬅️** 
+*(Replace with your actual Vercel URL)*
 
-### **Live Demo**
-
-**[Click here to view the live application!](https://nimble-tapioca-ac12aa.netlify.app)**
-
----
-
-### **Features**
-
-- **Dynamic Background:** The background image changes based on the current weather conditions.
-- **City Search:** Search for any city worldwide to get its weather forecast.
-- **Current Weather:** Displays temperature, feels like, wind speed, humidity, and a weather description.
-- **Hourly & Daily Forecasts:** Clean, scrollable sections for hourly and 7-day forecasts.
-- **Interactive Charts:**
-  - 24-hour temperature trend chart with custom weather icons.
-  - 24-hour precipitation probability chart.
-- **Unit Toggling:** Switch between Celsius and Fahrenheit.
-- **Dark/Light Mode:** A theme toggle for user comfort.
-- **Responsive Design:** Looks great on both desktop and mobile devices.
-- **Custom Favicon:** A unique browser tab icon for brand identity.
-- **User-Friendly Error Handling:** Displays clear messages for invalid city names or network issues.
+![Weather React Screenshot](https://i.imgur.com/EXAMPLE.png ) 
+*(This is an example URL. We will add a real screenshot in the next step)*
 
 ---
 
-### **Tech Stack**
+## ✨ Features
 
-- **Frontend:** React, Vite, CSS
-- **Backend:** Node.js, Express
-- **APIs:** Open-Meteo (Geocoding & Weather Forecast)
-- **Deployment:**
-  - Frontend deployed on **Netlify**.
-  - Backend deployed on **Render**.
+*   **Real-time Weather:** Get the current temperature, feels like, humidity, and wind speed.
+*   **Dynamic UI:** 
+    *   Background image changes based on the weather condition (clear, cloudy, rain, etc.) and time of day (day/night).
+    *   Weather icons that accurately represent the forecast.
+    *   Dark mode for comfortable viewing at night.
+*   **Detailed Forecasts:**
+    *   Hourly forecast for the next 24 hours.
+    *   7-day forecast with max/min temperatures.
+    *   Interactive charts for temperature and precipitation probability.
+*   **Smart Search & Geolocation:**
+    *   Search for any city worldwide.
+    *   Automatically fetches weather for your current location on initial load.
+*   **User-Friendly Experience:**
+    *   Fully responsive design for mobile, tablet, and desktop.
+    *   Loading and error states to provide clear feedback to the user.
+    *   Dynamic page title and a custom favicon.
+
+## 🛠️ Tech Stack
+
+*   **Frontend:** [React](https://reactjs.org/ ), [Vite](https://vitejs.dev/ )
+*   **Styling:** CSS Modules, Flexbox, Grid
+*   **Data Fetching:** [Axios](https://axios-http.com/ )
+*   **Charting:** [Recharts](https://recharts.org/ )
+*   **Deployment:** [Vercel](https://vercel.com/ )
+
+## 🚀 Running Locally
+
+To run this project on your local machine, follow these steps:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/yahyael995/weather-react.git
+    cd weather-react
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Create a `.env.local` file:**
+    Create a file named `.env.local` in the root of the project and add your backend API URL:
+    ```
+    VITE_API_URL=http://localhost:3001
+    ```
+    *(Note: This assumes you are also running the [weather-backend](https://github.com/YOUR_USERNAME/weather-backend ) project locally on port 3001).*
+
+4.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:5173`.
+
+---
