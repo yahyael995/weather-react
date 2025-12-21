@@ -5,7 +5,7 @@ A clean, modern, and responsive weather forecast application built with React an
 **➡️ [Live Demo](https://weather-react-xi-five.vercel.app/ ) ⬅️** 
 *(Replace with your actual Vercel URL)*
 
-![Weather React Screenshot](https://i.imgur.com/EXAMPLE.png ) 
+![Weather React Screenshot](<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/df6b0a04-7cf1-4f3e-ab4c-c3e02fe96f66" /> ) 
 *(This is an example URL. We will add a real screenshot in the next step)*
 
 ---
@@ -57,7 +57,7 @@ To run this project on your local machine, follow these steps:
     ```
     VITE_API_URL=http://localhost:3001
     ```
-    *(Note: This assumes you are also running the [weather-backend](https://github.com/YOUR_USERNAME/weather-backend ) project locally on port 3001).*
+    *(Note: This assumes you are also running the [weather-backend](https://github.com/yahyael995/weather-backend ) project locally on port 3001).*
 
 4.  **Start the development server:**
     ```bash
