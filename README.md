@@ -5,7 +5,7 @@ A clean, modern, and responsive weather forecast application built with React an
 **➡️ [Live Demo](https://weather-react-xi-five.vercel.app/ ) ⬅️** 
 *(Replace with your actual Vercel URL)*
 
-![Weather React Screenshot](<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/df6b0a04-7cf1-4f3e-ab4c-c3e02fe96f66" /> ) 
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/1f759e39-8034-44d5-9030-81800e5403ff" />
 *(This is an example URL. We will add a real screenshot in the next step)*
 
 ---
