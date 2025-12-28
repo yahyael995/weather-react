@@ -1,19 +1,42 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import basicSsl from '@vitejs/plugin-basic-ssl';
+import { VitePWA } from 'vite-plugin-pwa';
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), basicSsl()],
-  server: {
-    https: true,
-    proxy: {
-      // Proxy requests from /api to the backend server
-      '/api': {
-        target: 'https://weather-backend-ogz2.onrender.com',
-        changeOrigin: true,
-        secure: false, // IMPORTANT: This allows connecting to a backend with a self-signed certificate
-        rewrite: (path) => path.replace(/^\/api/, ''), // Remove /api from the request path
+  plugins: [
+    react( ),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg'],
+      manifest: {
+        name: 'Weather React',
+        short_name: 'Weather',
+        description: 'A modern weather forecast application built with React.',
+        theme_color: '#8884d8',
+        background_color: '#ffffff',
+        display: 'standalone',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
       },
-    },
-  },
+    }),
+  ],
 });
