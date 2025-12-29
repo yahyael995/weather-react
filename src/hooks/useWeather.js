@@ -3,10 +3,10 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
 
-// The VITE_ prefix is important for Vercel to expose the variable
+// Hardcoding the API URL to bypass any potential environment variable issues.
 const apiUrl = "https://weather-backend-final.onrender.com/weather";
 
-export const useWeather = () => {
+export const useWeather = ( ) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,14 +41,10 @@ export const useWeather = () => {
       } catch (err) {
         console.error("AxiosError:", err);
         if (err.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
           setError(err.response.data.error || 'An unknown server error occurred. Please try again.');
         } else if (err.request) {
-          // The request was made but no response was received
           setError('Network error: Could not connect to the weather server. Please check your connection.');
         } else {
-          // Something happened in setting up the request that triggered an Error
           setError('An unexpected error occurred. Please try again.');
         }
       } finally {
@@ -62,7 +58,6 @@ export const useWeather = () => {
     setUnit((prevUnit) => {
       const newUnit = prevUnit === 'celsius' ? 'fahrenheit' : 'celsius';
       // In a more advanced version, we would refetch data here.
-      // For now, the logic in App.jsx will handle re-rendering with the new unit.
       return newUnit;
     });
   };
