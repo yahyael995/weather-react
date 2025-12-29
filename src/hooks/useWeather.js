@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import axios from 'axios';
 
 // The VITE_ prefix is important for Vercel to expose the variable
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || "";
 
 export const useWeather = () => {
   const [weatherData, setWeatherData] = useState(null);
