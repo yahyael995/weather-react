@@ -1,10 +1,9 @@
-// src/hooks/useWeather.js (The 100% Correct and Final Version)
+// src/hooks/useWeather.js (The Radical and Final Fix)
 
 import { useState, useCallback } from 'react';
 import axios from 'axios';
 
-// Hardcoding the API URL to bypass any potential environment variable issues.
-const apiUrl = "https://weather-backend-final.onrender.com/weather";
+const API_BASE_URL = "https://weather-backend-final.onrender.com/weather";
 
 export const useWeather = ( ) => {
   const [weatherData, setWeatherData] = useState(null);
@@ -16,27 +15,29 @@ export const useWeather = ( ) => {
     async (searchParams) => {
       setLoading(true);
       setError(null);
-      setWeatherData(null); // Clear old data immediately
+      setWeatherData(null);
 
       try {
-        // --- THIS IS THE CRITICAL FIX ---
-        // We build the parameters object manually to ensure it's correct.
-        const params = {
-          units: unit,
-        };
+        // --- THIS IS THE COMPLETELY NEW AND DIFFERENT FIX ---
+        let finalUrl;
+        const unitParam = `units=${unit}`;
 
         if (searchParams.city) {
-          params.city = searchParams.city;
+          // We build the URL string manually, encoding the city name
+          finalUrl = `${API_BASE_URL}?${unitParam}&city=${encodeURIComponent(searchParams.city)}`;
         } else if (searchParams.coords) {
-          params.lat = searchParams.coords.latitude;
-          params.lon = searchParams.coords.longitude;
+          // We build the URL string manually for coordinates
+          finalUrl = `${API_BASE_URL}?${unitParam}&lat=${searchParams.coords.latitude}&lon=${searchParams.coords.longitude}`;
         } else {
-          // This case should not happen, but it's a good safeguard
           throw new Error("No search parameters provided.");
         }
-        // --- END OF CRITICAL FIX ---
+        
+        console.log("Requesting URL:", finalUrl); // For debugging, we can see the exact URL
+        
+        // We now pass the fully constructed URL directly to axios
+        const response = await axios.get(finalUrl);
+        // --- END OF THE NEW FIX ---
 
-        const response = await axios.get(apiUrl, { params });
         setWeatherData(response.data);
       } catch (err) {
         console.error("AxiosError:", err);
@@ -51,13 +52,12 @@ export const useWeather = ( ) => {
         setLoading(false);
       }
     },
-    [unit] // Dependency array includes 'unit'
+    [unit]
   );
 
   const toggleUnit = () => {
     setUnit((prevUnit) => {
       const newUnit = prevUnit === 'celsius' ? 'fahrenheit' : 'celsius';
-      // In a more advanced version, we would refetch data here.
       return newUnit;
     });
   };
