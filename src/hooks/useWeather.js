@@ -61,17 +61,8 @@ export const useWeather = () => {
   const toggleUnit = () => {
     setUnit((prevUnit) => {
       const newUnit = prevUnit === 'celsius' ? 'fahrenheit' : 'celsius';
-      // Refetch weather data with the new unit if data already exists
-      if (weatherData) {
-        const searchParams = weatherData.location.name
-          ? { city: weatherData.location.name }
-          : { coords: { latitude: weatherData.location.latitude, longitude: weatherData.location.longitude } };
-        
-        // We need to manually call fetchWeatherData here with the new unit.
-        // But since fetchWeatherData depends on 'unit', we can't pass it directly.
-        // The easiest way is to just set the new unit and let a useEffect handle refetching.
-        // For now, let's just update the unit. The logic in App.jsx will handle the display.
-      }
+      // In a more advanced version, we would refetch data here.
+      // For now, the logic in App.jsx will handle re-rendering with the new unit.
       return newUnit;
     });
   };
