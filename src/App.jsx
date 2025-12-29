@@ -1,5 +1,3 @@
-// src/App.jsx (النسخة النهائية مع عنوان ديناميكي)
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useWeather } from './hooks/useWeather';
@@ -146,3 +144,5 @@ function App() {
 }
 
 export default App;
+
+
