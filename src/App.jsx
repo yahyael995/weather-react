@@ -74,11 +74,14 @@ function App() {
     setIsDarkMode((prevMode) => !prevMode);
   };
 
-  const backgroundStyle = {
-    backgroundImage: weatherData
-      ? `url(${getBackgroundImage(weatherData.current.weathercode, weatherData.current.is_day)})`
-      : `url(${defaultBackground})`,
-  };
+  // This is the CRITICAL FIX.
+// We check if weatherData AND weatherData.current exist before trying to access their properties.
+const backgroundStyle = {
+  backgroundImage: (weatherData && weatherData.current)
+    ? `url(${getBackgroundImage(weatherData.current.weather_code, weatherData.current.is_day)})`
+    : `url(${defaultBackground})`,
+};
+
 
   return (
     <div className="App" style={backgroundStyle}>
