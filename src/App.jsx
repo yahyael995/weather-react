@@ -8,6 +8,8 @@ import DailyForecast from './components/DailyForecast';
 import { getBackgroundImage } from './utils/backgrounds';
 import { getRandomCity } from './utils/randomCities';
 import defaultBackground from './assets/backgrounds/default.jpg';
+import ErrorBoundary from './components/ErrorBoundary';
+
 
 const WeatherChart = React.lazy(() => import('./components/WeatherChart'));
 const PrecipitationChart = React.lazy(
@@ -105,42 +107,45 @@ const backgroundStyle = {
         </div>
 
         <div className="content-area">
-          {loading && <div className="loading-spinner"></div>}
-          {error && (
-            <div className="solid-card error-box">
-              <p>
-                ⚠️
-                {error}
-              </p>
-            </div>
-          )}
-          {!loading && !error && !weatherData && (
-            <div className="solid-card welcome-message">
-              <h2>Welcome to Weather React</h2>
-              <p>
-                Enter a city name or use the location button to get the weather
-                forecast.
-              </p>
-            </div>
-          )}
-          {weatherData && (
-            <>
-              <CurrentWeather data={weatherData} unit={unit} />
-              <HourlyForecast data={weatherData.hourly} unit={unit} />
-              <DailyForecast data={weatherData.daily} unit={unit} />
-              <React.Suspense
-                fallback={<div className="loading-spinner"></div>}
-              >
-                <div className="solid-card chart-container">
-                  <WeatherChart hourlyData={weatherData.hourly} unit={unit} />
-                </div>
-                <div className="solid-card chart-container">
-                  <PrecipitationChart hourlyData={weatherData.hourly} />
-                </div>
-              </React.Suspense>
-            </>
-          )}
-        </div>
+  <ErrorBoundary> {/* <--- أضفنا هذا هنا */}
+    {loading && <div className="loading-spinner"></div>}
+    {error && (
+      <div className="solid-card error-box">
+        <p>
+          ⚠️
+          {error}
+        </p>
+      </div>
+    )}
+    {!loading && !error && !weatherData && (
+      <div className="solid-card welcome-message">
+        <h2>Welcome to Weather React</h2>
+        <p>
+          Enter a city name or use the location button to get the weather
+          forecast.
+        </p>
+      </div>
+    )}
+    {weatherData && (
+      <>
+        <CurrentWeather data={weatherData} unit={unit} />
+        <HourlyForecast data={weatherData.hourly} unit={unit} />
+        <DailyForecast data={weatherData.daily} unit={unit} />
+        <React.Suspense
+          fallback={<div className="loading-spinner"></div>}
+        >
+          <div className="solid-card chart-container">
+            <WeatherChart hourlyData={weatherData.hourly} unit={unit} />
+          </div>
+          <div className="solid-card chart-container">
+            <PrecipitationChart hourlyData={weatherData.hourly} />
+          </div>
+        </React.Suspense>
+      </>
+    )}
+  </ErrorBoundary> {/* <--- وهذا هنا */}
+</div>
+
       </div>
     </div>
   );
