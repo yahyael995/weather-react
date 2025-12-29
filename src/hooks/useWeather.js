@@ -20,6 +20,7 @@ export const useWeather = ( ) => {
 
       try {
         // --- THIS IS THE CRITICAL FIX ---
+        // We build the parameters object manually to ensure it's correct.
         const params = {
           units: unit,
         };
@@ -30,6 +31,7 @@ export const useWeather = ( ) => {
           params.lat = searchParams.coords.latitude;
           params.lon = searchParams.coords.longitude;
         } else {
+          // This case should not happen, but it's a good safeguard
           throw new Error("No search parameters provided.");
         }
         // --- END OF CRITICAL FIX ---
@@ -49,12 +51,13 @@ export const useWeather = ( ) => {
         setLoading(false);
       }
     },
-    [unit]
+    [unit] // Dependency array includes 'unit'
   );
 
   const toggleUnit = () => {
     setUnit((prevUnit) => {
       const newUnit = prevUnit === 'celsius' ? 'fahrenheit' : 'celsius';
+      // In a more advanced version, we would refetch data here.
       return newUnit;
     });
   };
