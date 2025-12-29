@@ -1,5 +1,4 @@
-// src/utils/icons.js (النسخة النهائية مع إصلاح نطاق المتغير)
-
+// src/utils/icons.js (Updated for WeatherAPI.com codes)
 import clearDay from '../assets/icons/clear-day.svg';
 import clearNight from '../assets/icons/clear-night.svg';
 import cloudy from '../assets/icons/cloudy.svg';
@@ -11,101 +10,66 @@ import snow from '../assets/icons/snow.svg';
 import thunderstorm from '../assets/icons/thunderstorm.svg';
 
 const iconMap = {
-  0: clearDay,
-  1: partlyCloudyDay,
-  2: cloudy,
-  3: cloudy,
-  45: fog,
-  48: fog,
-  51: rain,
-  53: rain,
-  55: rain,
-  56: rain,
-  57: rain,
-  61: rain,
-  63: rain,
-  65: rain,
-  66: rain,
-  67: rain,
-  71: snow,
-  73: snow,
-  75: snow,
-  77: snow,
-  80: rain,
-  81: rain,
-  82: rain,
-  85: snow,
-  86: snow,
-  95: thunderstorm,
-  96: thunderstorm,
-  99: thunderstorm,
+  // Day icons
+  1000: clearDay, // Sunny
+  1003: partlyCloudyDay, // Partly cloudy
+  1006: cloudy, // Cloudy
+  1009: cloudy, // Overcast
+  1030: fog, // Mist
+  1063: rain, // Patchy rain possible
+  1066: snow, // Patchy snow possible
+  1069: rain, // Patchy sleet possible
+  1072: rain, // Patchy freezing drizzle possible
+  1087: thunderstorm, // Thundery outbreaks possible
+  1114: snow, // Blowing snow
+  1117: snow, // Blizzard
+  1135: fog, // Fog
+  1147: fog, // Freezing fog
+  1150: rain,
+  1153: rain,
+  1168: rain,
+  1171: rain,
+  1180: rain,
+  1183: rain,
+  1186: rain,
+  1189: rain,
+  1192: rain,
+  1195: rain,
+  1198: rain,
+  1201: rain,
+  1204: snow, // Light sleet
+  1207: snow, // Moderate or heavy sleet
+  1210: snow,
+  1213: snow,
+  1216: snow,
+  1219: snow,
+  1222: snow,
+  1225: snow,
+  1237: snow, // Ice pellets
+  1240: rain,
+  1243: rain,
+  1246: rain,
+  1249: snow, // Light sleet showers
+  1252: snow, // Moderate or heavy sleet showers
+  1255: snow,
+  1258: snow,
+  1261: snow,
+  1264: snow,
+  1273: thunderstorm,
+  1276: thunderstorm,
+  1279: thunderstorm,
+  1282: thunderstorm,
 };
 
-const descriptionMap = {
-  0: 'Clear Sky',
-  1: 'Mainly Clear',
-  2: 'Partly Cloudy',
-  3: 'Overcast',
-  45: 'Fog',
-  48: 'Rime Fog',
-  51: 'Light Drizzle',
-  53: 'Drizzle',
-  55: 'Dense Drizzle',
-  56: 'Light Freezing Drizzle',
-  57: 'Dense Freezing Drizzle',
-  61: 'Slight Rain',
-  63: 'Rain',
-  65: 'Heavy Rain',
-  66: 'Light Freezing Rain',
-  67: 'Heavy Freezing Rain',
-  71: 'Slight Snowfall',
-  73: 'Snowfall',
-  75: 'Heavy Snowfall',
-  77: 'Snow Grains',
-  80: 'Slight Rain Showers',
-  81: 'Rain Showers',
-  82: 'Violent Rain Showers',
-  85: 'Slight Snow Showers',
-  86: 'Heavy Snow Showers',
-  95: 'Thunderstorm',
-  96: 'Thunderstorm with Hail',
-  99: 'Thunderstorm with Hail',
+const nightIconMap = {
+  1000: clearNight, // Clear
+  1003: partlyCloudyNight, // Partly cloudy
+  // For most other night conditions, the day icon is sufficient
 };
 
-// --- هذا هو الإصلاح الكامل ---
-const weatherConditions = {
-  0: 'clear',
-  1: 'clear',
-  2: 'cloudy',
-  3: 'cloudy',
-  45: 'cloudy',
-  48: 'cloudy',
-  51: 'rainy',
-  53: 'rainy',
-  55: 'rainy',
-  61: 'rainy',
-  63: 'rainy',
-  65: 'rainy',
-  71: 'snowy',
-  73: 'snowy',
-  75: 'snowy',
-  80: 'rainy',
-  81: 'rainy',
-  82: 'rainy',
-  95: 'thunderstorm',
-  96: 'thunderstorm',
-  99: 'thunderstorm',
+export const getWeatherIcon = (code, isDay) => {
+  if (!isDay && nightIconMap[code]) {
+    return nightIconMap[code];
+  }
+  return iconMap[code] || cloudy; // Default to cloudy icon
 };
-
-export function getWeatherIcon(code, is_day = 1) {
-  const condition = weatherConditions[code];
-
-  if (condition === 'clear' && !is_day) return clearNight;
-  if (condition === 'cloudy' && !is_day) return partlyCloudyNight;
-
-  return iconMap[code] || cloudy;
-}
-
-export function getWeatherDescription(code) {
-  return descriptionMap[code] || 'Unknown';
-}

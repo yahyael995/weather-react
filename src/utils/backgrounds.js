@@ -1,5 +1,4 @@
-// src/utils/backgrounds.js (النسخة النهائية مع الإصلاح النهائي)
-
+// src/utils/backgrounds.js (Updated for WeatherAPI.com codes)
 import clearDay from '../assets/backgrounds/clear-day.jpg';
 import clearNight from '../assets/backgrounds/clear-night.jpg';
 import cloudyDay from '../assets/backgrounds/cloudy-day.jpg';
@@ -10,51 +9,39 @@ import snowyDay from '../assets/backgrounds/snowy-day.jpg';
 import snowyNight from '../assets/backgrounds/snowy-night.jpg';
 import thunderstormDay from '../assets/backgrounds/thunderstorm-day.jpg';
 import thunderstormNight from '../assets/backgrounds/thunderstorm-night.jpg';
-import defaultDay from '../assets/backgrounds/default.jpg'; // Assuming default is a day image
+import defaultBg from '../assets/backgrounds/default.jpg';
 
 const backgroundMap = {
-  'clear-day': clearDay,
-  'clear-night': clearNight,
-  'cloudy-day': cloudyDay,
-  'cloudy-night': cloudyNight,
-  'rainy-day': rainyDay,
-  'rainy-night': rainyNight,
-  'snowy-day': snowyDay,
-  'snowy-night': snowyNight,
-  'thunderstorm-day': thunderstormDay,
-  'thunderstorm-night': thunderstormNight,
-  'default-day': defaultDay,
-  'default-night': cloudyNight, // Fallback for default night
+  // Clear/Sunny
+  1000: { day: clearDay, night: clearNight },
+  // Cloudy
+  1003: { day: cloudyDay, night: cloudyNight }, // Partly Cloudy
+  1006: { day: cloudyDay, night: cloudyNight }, // Cloudy
+  1009: { day: cloudyDay, night: cloudyNight }, // Overcast
+  // Rain
+  1063: { day: rainyDay, night: rainyNight },
+  1150: { day: rainyDay, night: rainyNight },
+  1183: { day: rainyDay, night: rainyNight },
+  1189: { day: rainyDay, night: rainyNight },
+  1195: { day: rainyDay, night: rainyNight },
+  1240: { day: rainyDay, night: rainyNight },
+  1243: { day: rainyDay, night: rainyNight },
+  // Snow
+  1066: { day: snowyDay, night: snowyNight },
+  1213: { day: snowyDay, night: snowyNight },
+  1219: { day: snowyDay, night: snowyNight },
+  1225: { day: snowyDay, night: snowyNight },
+  1255: { day: snowyDay, night: snowyNight },
+  // Thunderstorm
+  1087: { day: thunderstormDay, night: thunderstormNight },
+  1273: { day: thunderstormDay, night: thunderstormNight },
+  1276: { day: thunderstormDay, night: thunderstormNight },
 };
 
-const weatherConditions = {
-  0: 'clear',
-  1: 'clear',
-  2: 'cloudy',
-  3: 'cloudy',
-  45: 'cloudy', // Fog
-  48: 'cloudy', // Rime Fog
-  51: 'rainy',
-  53: 'rainy',
-  55: 'rainy',
-  61: 'rainy',
-  63: 'rainy',
-  65: 'rainy',
-  71: 'snowy',
-  73: 'snowy',
-  75: 'snowy',
-  80: 'rainy',
-  81: 'rainy',
-  82: 'rainy',
-  95: 'thunderstorm',
-  96: 'thunderstorm',
-  99: 'thunderstorm',
+export const getBackgroundImage = (code, isDay) => {
+  const condition = backgroundMap[code];
+  if (condition) {
+    return isDay ? condition.day : condition.night;
+  }
+  return defaultBg;
 };
-
-// --- هذا هو الإصلاح ---
-export function getBackgroundImage(code, is_day) {
-  const condition = weatherConditions[code] || 'default';
-  const timeOfDay = is_day ? 'day' : 'night';
-  const key = `${condition}-${timeOfDay}`;
-  return backgroundMap[key] || backgroundMap['default-day'];
-}
