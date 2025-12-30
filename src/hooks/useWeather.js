@@ -1,65 +1,75 @@
-// src/hooks/useWeather.js (The Radical and Final Fix)
-
+// src/hooks/useWeather.js (The 100% Final Correct Version with State Memory)
 import { useState, useCallback } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = "https://weather-backend-final.onrender.com/weather";
+const API_URL = import.meta.env.VITE_API_URL;
 
-export const useWeather = ( ) => {
+export const useWeather = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [unit, setUnit] = useState('celsius');
+  const [lastQuery, setLastQuery] = useState(null); // To remember the last search
 
-  const fetchWeatherData = useCallback(
-    async (searchParams) => {
-      setLoading(true);
-      setError(null);
+  const fetchWeatherData = useCallback(async (query) => {
+    setLoading(true);
+    setError(null);
+    setLastQuery(query); // Remember this query
+
+    let params = { units: unit };
+    if (query.city) {
+      params.city = query.city;
+    } else if (query.coords) {
+      params.lat = query.coords.latitude;
+      params.lon = query.coords.longitude;
+    }
+
+    try {
+      const response = await axios.get(`${API_URL}/weather`, { params });
+      setWeatherData(response.data);
+    } catch (err) {
+      const errorMessage = err.response?.data?.error || 'An unexpected error occurred. Please try again.';
+      setError(errorMessage);
       setWeatherData(null);
-
-      try {
-        // --- THIS IS THE COMPLETELY NEW AND DIFFERENT FIX ---
-        let finalUrl;
-        const unitParam = `units=${unit}`;
-
-        if (searchParams.city) {
-          // We build the URL string manually, encoding the city name
-          finalUrl = `${API_BASE_URL}?${unitParam}&city=${encodeURIComponent(searchParams.city)}`;
-        } else if (searchParams.coords) {
-          // We build the URL string manually for coordinates
-          finalUrl = `${API_BASE_URL}?${unitParam}&lat=${searchParams.coords.latitude}&lon=${searchParams.coords.longitude}`;
-        } else {
-          throw new Error("No search parameters provided.");
-        }
-        
-        console.log("Requesting URL:", finalUrl); // For debugging, we can see the exact URL
-        
-        // We now pass the fully constructed URL directly to axios
-        const response = await axios.get(finalUrl);
-        // --- END OF THE NEW FIX ---
-
-        setWeatherData(response.data);
-      } catch (err) {
-        console.error("AxiosError:", err);
-        if (err.response) {
-          setError(err.response.data.error || 'An unknown server error occurred. Please try again.');
-        } else if (err.request) {
-          setError('Network error: Could not connect to the weather server. Please check your connection.');
-        } else {
-          setError('An unexpected error occurred. Please try again.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
-    [unit]
-  );
+    } finally {
+      setLoading(false);
+    }
+  }, [unit]); // Re-create this function only if 'unit' changes
 
   const toggleUnit = () => {
-    setUnit((prevUnit) => {
-      const newUnit = prevUnit === 'celsius' ? 'fahrenheit' : 'celsius';
-      return newUnit;
-    });
+    const newUnit = unit === 'celsius' ? 'fahrenheit' : 'celsius';
+    setUnit(newUnit);
+    
+    // --- THIS IS THE CRITICAL FIX ---
+    // If we have a last query, re-fetch the data with the new unit
+    if (lastQuery) {
+        // We need to manually call fetch with the new unit because the state update is async
+        const reFetch = async () => {
+            setLoading(true);
+            setError(null);
+            
+            let params = { units: newUnit }; // Use newUnit directly
+            if (lastQuery.city) {
+                params.city = lastQuery.city;
+            } else if (lastQuery.coords) {
+                params.lat = lastQuery.coords.latitude;
+                params.lon = lastQuery.coords.longitude;
+            }
+
+            try {
+                const response = await axios.get(`${API_URL}/weather`, { params });
+                setWeatherData(response.data);
+            } catch (err) {
+                const errorMessage = err.response?.data?.error || 'An unexpected error occurred. Please try again.';
+                setError(errorMessage);
+                setWeatherData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        reFetch();
+    }
+    // --- END OF CRITICAL FIX ---
   };
 
   return { weatherData, loading, error, unit, fetchWeatherData, toggleUnit, setError };
