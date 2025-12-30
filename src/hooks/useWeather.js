@@ -37,8 +37,10 @@ export const useWeather = () => {
   }, [unit]); // Re-create this function only if 'unit' changes
 
   const toggleUnit = () => {
-    const newUnit = unit === 'celsius' ? 'fahrenheit' : 'celsius';
-    setUnit(newUnit);
+  console.log("--- TOGGLE UNIT BUTTON CLICKED! ---"); // <--- أضف هذا السطر فقط
+
+  const newUnit = unit === 'celsius' ? 'fahrenheit' : 'celsius';
+  setUnit(newUnit);
     
     // --- THIS IS THE CRITICAL FIX ---
     // If we have a last query, re-fetch the data with the new unit
