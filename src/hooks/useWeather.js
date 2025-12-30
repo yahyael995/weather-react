@@ -1,5 +1,5 @@
-// src/hooks/useWeather.js (The 100% Final Correct Version with All Imports)
-import { useState, useCallback, useEffect } from 'react'; // THE FIX IS HERE
+// src/hooks/useWeather.js (The TRUE Final Version)
+import { useState, useCallback, useEffect } from 'react'; // FIX 1: useEffect is included
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -37,6 +37,7 @@ export const useWeather = () => {
       const response = await axios.get(`${API_URL}/weather`, { params });
       setWeatherData(response.data);
     } catch (err) {
+      // FIX 2: Ensure error is always a string
       const errorMessage = err.response?.data?.error || err.message || 'An unexpected error occurred.';
       setError(errorMessage);
       setWeatherData(null);
@@ -50,10 +51,12 @@ export const useWeather = () => {
   };
 
   useEffect(() => {
+    // This effect runs when 'unit' changes.
+    // It refetches data only if we have a location already.
     if (lastQuery) {
         fetchWeatherData();
     }
-  }, [unit]);
+  }, [unit]); // Dependency array ensures it ONLY runs when 'unit' changes
 
   return { weatherData, loading, error, unit, fetchWeatherData, toggleUnit, setError };
 };
