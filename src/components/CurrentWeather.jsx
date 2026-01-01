@@ -1,37 +1,29 @@
-// src/components/CurrentWeather.jsx (The Final Correct Version)
+// src/components/CurrentWeather.jsx (Final Fix)
 import React from 'react';
-import { getWeatherIcon } from '../utils/icons';
-import { getWeatherDescription } from '../utils/descriptions';
+import { getWeatherIcon } from '../utils/weatherIcons.jsx'; // Import the function
+import { getWeatherDescription } from '../utils/weatherUtils.js';
 
-function CurrentWeather({ data, unit }) {
-  if (!data || !data.current) {
-    return null;
-  }
+const CurrentWeather = ({ data, unit }) => {
+  // Check if the necessary 'current' data exists
+  if (!data || !data.current) return null;
 
-  const { location, current } = data;
-  const temp = Math.round(current.temperature_2m);
-  const feelsLike = Math.round(current.apparent_temperature);
-  const weatherCode = current.weather_code;
-  const isDay = current.is_day === 1;
-  const description = getWeatherDescription(weatherCode);
+  const current = data.current; // Use a shorter variable for convenience
+  const temp = unit === 'celsius' ? current.temperature_2m : current.temperature_2m_fahrenheit;
+  const apparentTemp = unit === 'celsius' ? current.apparent_temperature : current.apparent_temperature_fahrenheit;
 
   return (
     <div className="solid-card current-weather">
-      <h1>{temp}°</h1>
-      <div className="location">{location.name}, {location.country}</div>
-      <div className="description">
-        <img
-          src={getWeatherIcon(weatherCode, isDay)}
-          alt={description}
-          className="weather-icon-large"
-        />
-        <span>{description}</span>
-      </div>
+      {getWeatherIcon(current.weathercode, current.is_day, 64)}
+      <p className="location">{data.city || 'Current Weather'}</p>
+      <p className="description">{getWeatherDescription(current.weathercode)}</p>
+      <h1>{Math.round(temp)}°</h1>
+      <p className="description">Feels like {Math.round(apparentTemp)}°</p>
       <div className="details">
-        Feels like: {feelsLike}°
+        <p>Wind: {current.wind_speed_10m} km/h</p>
+        <p>Humidity: {current.relative_humidity_2m}%</p>
       </div>
     </div>
   );
-}
+};
 
 export default CurrentWeather;

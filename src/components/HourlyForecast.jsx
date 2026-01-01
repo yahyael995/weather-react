@@ -1,41 +1,50 @@
-// src/components/HourlyForecast.jsx (The Bulletproof Final Version)
+// src/components/HourlyForecast.jsx (The Final, Corrected Logic)
 import React from 'react';
-import { getWeatherIcon } from '../utils/icons';
+import { getWeatherIcon } from '../utils/weatherIcons.jsx';
 
-function HourlyForecast({ data, unit }) {
-  // --- THE BULLETPROOF CHECK ---
-  if (!data || !Array.isArray(data.time)) {
+const HourlyForecast = ({ data, unit }) => {
+  if (!data || !data.hourly || !data.hourly.time || !data.hourly.temperature_2m) {
     return null;
   }
-  // --- END OF BULLETPROOF CHECK ---
+
+  const { time, temperature_2m, temperature_2m_fahrenheit, weathercode, is_day } = data.hourly;
+
+  // 1. Find the index of the current hour in the time array.
+  const now = new Date();
+  const currentHourIndex = time.findIndex(t => new Date(t) >= now);
+
+  // If we can't find the current hour, something is wrong, so don't render.
+  if (currentHourIndex === -1) return null;
+
+  // 2. Slice the next 24 hours starting from the current hour.
+  const next24HoursData = time.slice(currentHourIndex, currentHourIndex + 24);
+
+  const forecastItems = next24HoursData.map((t, i) => {
+    const dataIndex = currentHourIndex + i; // Get the correct index from the original array
+    const temp = unit === 'celsius' ? temperature_2m[dataIndex] : temperature_2m_fahrenheit[dataIndex];
+    
+    return {
+      time: new Date(t).getHours(),
+      temp: Math.round(temp),
+      code: weathercode[dataIndex],
+      is_day: is_day[dataIndex]
+    };
+  });
 
   return (
     <div className="solid-card hourly-forecast">
       <h3>Hourly Forecast</h3>
       <div className="hourly-scroll">
-        {data.time.map((time, index) => {
-          const temp = data.temperature_2m?.[index] !== undefined ? Math.round(data.temperature_2m[index]) : '--';
-          const weatherCode = data.weather_code?.[index];
-          const isDay = data.is_day?.[index] === 1;
-          
-          const date = new Date(time);
-          const hour = !isNaN(date) ? date.getHours() + ':00' : 'N/A';
-
-          return (
-            <div className="hour-item" key={time || index}>
-              <span>{hour}</span>
-              <img
-                src={getWeatherIcon(weatherCode, isDay)}
-                alt="Weather icon"
-                className="weather-icon"
-              />
-              <span>{temp}°</span>
-            </div>
-          );
-        })}
+        {forecastItems.map((hour, index) => (
+          <div key={index} className="hour-item">
+            <span>{hour.time}:00</span>
+            {getWeatherIcon(hour.code, hour.is_day, 32)}
+            <span>{hour.temp}°</span>
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default HourlyForecast;
