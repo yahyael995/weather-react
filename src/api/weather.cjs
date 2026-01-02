@@ -1,12 +1,10 @@
-// /api/weather.js (Corrected to use WeatherAPI.com for Geocoding)
-import axios from 'axios';
-import dotenv from 'dotenv';
+// /api/weather.cjs (Corrected for CommonJS)
+const axios = require('axios');
+require('dotenv').config();
 
-dotenv.config();
-
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   const { unit, city, latitude, longitude } = req.query;
-  const apiKey = process.env.VITE_WEATHER_API_KEY; // This is your WeatherAPI.com key
+  const apiKey = process.env.VITE_WEATHER_API_KEY;
 
   if (!apiKey) {
     return res.status(500).json({ error: 'API Key is missing on the server.' });
@@ -21,7 +19,6 @@ export default async function handler(req, res) {
   let locationName = city;
 
   try {
-    // Use the provided city name to get coordinates from WeatherAPI.com
     if (city) {
       const geocodeUrl = `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${city}`;
       const geocodeResponse = await axios.get(geocodeUrl );
@@ -30,9 +27,8 @@ export default async function handler(req, res) {
       }
       lat = geocodeResponse.data[0].lat;
       lon = geocodeResponse.data[0].lon;
-      locationName = geocodeResponse.data[0].name; // Use the name from the API
+      locationName = geocodeResponse.data[0].name;
     } else if (lat && lon && !city) {
-      // If we have coordinates but no city name, get the name
       const reverseGeocodeUrl = `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${lat},${lon}`;
       const reverseGeocodeResponse = await axios.get(reverseGeocodeUrl );
       if (reverseGeocodeResponse.data.length > 0) {
@@ -40,7 +36,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // Now, get the detailed forecast from Open-Meteo using the coordinates
     const weatherUrl = `https://api.open-meteo.com/v1/forecast`;
     const weatherParams = {
       latitude: lat,
@@ -55,11 +50,10 @@ export default async function handler(req, res) {
 
     const weatherResponse = await axios.get(weatherUrl, { params: weatherParams } );
     
-    // Send the final combined data
     res.status(200).json({ ...weatherResponse.data, city: locationName });
 
   } catch (error) {
     console.error('Error fetching data:', error.message);
     res.status(500).json({ error: 'Failed to fetch data from external API.' });
   }
-}
+};
