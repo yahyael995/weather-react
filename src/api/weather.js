@@ -1,40 +1,46 @@
-// /api/weather.js (Vercel Serverless Function)
+// /api/weather.js (Corrected to use WeatherAPI.com for Geocoding)
 import axios from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// This is now the main export, the serverless function handler
 export default async function handler(req, res) {
-  console.log('--- VERCEL FUNCTION: WEATHER REQUEST RECEIVED! ---');
-  
   const { unit, city, latitude, longitude } = req.query;
-  const apiKey = process.env.VITE_WEATHER_API_KEY;
+  const apiKey = process.env.VITE_WEATHER_API_KEY; // This is your WeatherAPI.com key
 
   if (!apiKey) {
-    console.error('API Key is missing on the server.');
     return res.status(500).json({ error: 'API Key is missing on the server.' });
   }
 
   if (!city && (!latitude || !longitude)) {
-    console.error('City or coordinates are required.');
     return res.status(400).json({ error: 'City or coordinates are required.' });
   }
 
   let lat = latitude;
   let lon = longitude;
+  let locationName = city;
 
   try {
+    // Use the provided city name to get coordinates from WeatherAPI.com
     if (city) {
-      const geocodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${apiKey}`;
+      const geocodeUrl = `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${city}`;
       const geocodeResponse = await axios.get(geocodeUrl );
       if (geocodeResponse.data.length === 0) {
         return res.status(404).json({ error: 'City not found.' });
       }
       lat = geocodeResponse.data[0].lat;
       lon = geocodeResponse.data[0].lon;
+      locationName = geocodeResponse.data[0].name; // Use the name from the API
+    } else if (lat && lon && !city) {
+      // If we have coordinates but no city name, get the name
+      const reverseGeocodeUrl = `https://api.weatherapi.com/v1/search.json?key=${apiKey}&q=${lat},${lon}`;
+      const reverseGeocodeResponse = await axios.get(reverseGeocodeUrl );
+      if (reverseGeocodeResponse.data.length > 0) {
+        locationName = reverseGeocodeResponse.data[0].name;
+      }
     }
 
+    // Now, get the detailed forecast from Open-Meteo using the coordinates
     const weatherUrl = `https://api.open-meteo.com/v1/forecast`;
     const weatherParams = {
       latitude: lat,
@@ -48,27 +54,12 @@ export default async function handler(req, res) {
     };
 
     const weatherResponse = await axios.get(weatherUrl, { params: weatherParams } );
-    const responseData = weatherResponse.data;
-
-    // Fetch location name for coordinates
-    let locationName = city;
-    if (!locationName) {
-      try {
-        const reverseGeocodeUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`;
-        const reverseGeocodeResponse = await axios.get(reverseGeocodeUrl );
-        if (reverseGeocodeResponse.data.length > 0) {
-          locationName = reverseGeocodeResponse.data[0].name;
-        }
-      } catch (e) {
-        console.warn('Could not reverse geocode, continuing without a location name.');
-      }
-    }
-
+    
     // Send the final combined data
-    res.status(200).json({ ...responseData, city: locationName });
+    res.status(200).json({ ...weatherResponse.data, city: locationName });
 
   } catch (error) {
-    console.error('Error fetching weather data:', error.message);
-    res.status(500).json({ error: 'Failed to fetch weather data from external API.' });
+    console.error('Error fetching data:', error.message);
+    res.status(500).json({ error: 'Failed to fetch data from external API.' });
   }
 }
